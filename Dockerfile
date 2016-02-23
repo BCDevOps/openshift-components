@@ -1,2 +1,2 @@
 FROM node:0.12
-EXPOSE 8000
+USER daemon
