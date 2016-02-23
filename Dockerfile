@@ -1,2 +1,3 @@
 FROM node:0.12
-USER 1
+RUN useradd node -u 1001
+USER 1001
