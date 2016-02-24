@@ -13,6 +13,7 @@ if [ "$(ls /tmp/sti/artifacts/ 2>/dev/null)" ]; then
     mv /tmp/sti/artifacts/* ./
 fi
 
+echo "secret name is $SECRET_NAME"
 
 echo "---> Installing application source"
 pwd
