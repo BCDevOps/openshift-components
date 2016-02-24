@@ -17,8 +17,8 @@ fi
 echo "---> Installing application source"
 pwd
 cp -Rf /tmp/src/. ./
-echo "---> ls -l config"
-ls -l config
+echo "---> ls -R /tmp"
+ls -R /tmp
 
 if [ ! -z $HTTP_PROXY ]; then
 	echo "---> Setting npm http proxy to $HTTP_PROXY"
