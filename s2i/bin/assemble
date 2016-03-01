@@ -8,9 +8,9 @@
 set -e
 
 # restore build artifacts
-if [ "$(ls /tmp/sti/artifacts/ 2>/dev/null)" ]; then
+if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
     echo "---> restore build artifacts"
-    mv /tmp/sti/artifacts/* ./
+    mv /tmp/artifacts/* ./
 fi
 
 echo "---> ls -la /tmp"
