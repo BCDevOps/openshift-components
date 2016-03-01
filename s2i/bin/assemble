@@ -13,6 +13,9 @@ if [ "$(ls /tmp/sti/artifacts/ 2>/dev/null)" ]; then
     mv /tmp/sti/artifacts/* ./
 fi
 
+echo "---> ls -la /tmp"
+ls -la /tmp
+
 echo "---> Installing application source"
 cp -Rf /tmp/src/. ./
 
