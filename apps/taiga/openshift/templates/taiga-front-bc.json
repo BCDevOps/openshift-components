@@ -104,7 +104,7 @@
               "paths": [
                 {
                   "sourcePath": "/opt/app-root/src/static/.",
-                  "destinationDir": "var/www/html/static"
+                  "destinationDir": "${GIT_RUNTIME_CADDY_CONTEXT_DIR}/static"
                 }
               ]
             },
@@ -116,7 +116,7 @@
               "paths": [
                 {
                   "sourcePath": "/opt/app-root/src/dist/.",
-                  "destinationDir": "var/www/html"
+                  "destinationDir": "${GIT_RUNTIME_CADDY_CONTEXT_DIR}"
                 }
               ]
             }
@@ -129,7 +129,13 @@
               "kind": "ImageStreamTag",
               "namespace": "openshift",
               "name": "bcgov-s2i-caddy:latest"
-            }
+            },
+            "env": [
+              {
+                "name": "BUILD_LOGLEVEL",
+                "value": "0"
+              }
+            ]
           }
         },
         "output": {

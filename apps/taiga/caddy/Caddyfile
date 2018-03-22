@@ -15,12 +15,18 @@ proxy /admin taiga-back:8080/admin/ {
 }
 
 rewrite / {
+	regexp conf\.json
+	to conf.json.tmpl
+}
+
+
+rewrite / {
 	regexp .*
 	to {path} {path}/ /index.html
 }
 
 templates {
-    ext .json
+    ext .tmpl
 }
 
 
