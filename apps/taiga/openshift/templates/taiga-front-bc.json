@@ -195,7 +195,7 @@
     {
       "name": "GIT_RUNTIME_REF",
       "required": true,
-      "value": "refs/heads/v3.1.1"
+      "value": "master"
     },
     {
       "name": "GIT_RUNTIME_NODEJS_CONTEXT_DIR",
