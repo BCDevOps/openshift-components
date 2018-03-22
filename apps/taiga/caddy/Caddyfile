@@ -1,0 +1,28 @@
+0.0.0.0:2015
+
+root /var/www/html
+
+log stdout
+
+errors stdout
+
+proxy /admin taiga-back:8080/admin/ {
+    header_upstream Host {host}
+    header_upstream  X-Real-IP {remote}
+    header_upstream X-Scheme http
+    header_upstream X-Forwarded-Proto {scheme}
+    header_upstream X-Forwarded-For {remote}
+}
+
+rewrite / {
+	regexp .*
+	to {path} {path}/ /index.html
+}
+
+templates {
+    ext .json
+}
+
+
+
+

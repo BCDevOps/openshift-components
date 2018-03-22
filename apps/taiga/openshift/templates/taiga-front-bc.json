@@ -1,0 +1,215 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "true",
+    "creationTimestamp": null
+  },
+  "objects": [
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "taiga-front",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "taiga-front"
+        },
+        "annotations": {
+          "openshift.io/generated-by": "OpenShiftWebConsole"
+        }
+      },
+      "spec": {
+        "triggers": [
+          {
+            "type": "GitHub",
+            "github": {
+              "secret": "${GITHUB_WEBHOOK_SECRET}"
+            }
+          },
+          {
+            "type": "ImageChange",
+            "imageChange": {}
+          },
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "runPolicy": "Serial",
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "${GIT_UPSTREAM_URL}",
+            "ref": "${GIT_UPSTREAM_REF}"
+          }
+        },
+        "strategy": {
+          "type": "Source",
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "openshift",
+              "name": "nodejs:6"
+            },
+            "scripts": "${GIT_SCRIPTS_BASE_URL}"
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "taiga-front:latest"
+          }
+        },
+        "resources": {
+          "limits": {
+            "cpu": "4",
+            "memory": "4Gi"
+          }
+        },
+        "postCommit": {},
+        "nodeSelector": null
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "taiga-front-runtime",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "taiga-front"
+        }
+      },
+      "spec": {
+        "triggers": [
+          {
+            "type": "ImageChange",
+            "imageChange": {}
+          }
+        ],
+        "runPolicy": "Serial",
+        "source": {
+          "type": "Git",
+          "contextDir": "${GIT_RUNTIME_CADDY_CONTEXT_DIR}",
+          "git": {
+            "uri": "${GIT_RUNTIME_URL}",
+            "ref": "${GIT_RUNTIME_REF}"
+          },
+          "images": [
+            {
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "taiga-back:latest"
+              },
+              "paths": [
+                {
+                  "sourcePath": "/opt/app-root/src/static/.",
+                  "destinationDir": "var/www/html/static"
+                }
+              ]
+            },
+            {
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "taiga-front:latest"
+              },
+              "paths": [
+                {
+                  "sourcePath": "/opt/app-root/src/dist/.",
+                  "destinationDir": "var/www/html"
+                }
+              ]
+            }
+          ]
+        },
+        "strategy": {
+          "type": "Source",
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "openshift",
+              "name": "bcgov-s2i-caddy:latest"
+            }
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "taiga-front-runtime:latest",
+            "namespace": "${RUNTIME_OUTPUT_NAMESPACE}"
+          }
+        },
+        "resources": {
+          "limits": {
+            "cpu": "500m",
+            "memory": "4Gi"
+          }
+        },
+        "postCommit": {},
+        "completionDeadlineSeconds": 1800,
+        "nodeSelector": null
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "taiga-front"
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "taiga-front-runtime"
+      }
+    }
+  ],
+  "parameters": [
+    {
+      "name": "GITHUB_WEBHOOK_SECRET",
+      "generate": "expression",
+      "from": "[a-zA-Z0-9]{16}",
+      "required": true
+    },
+    {
+      "name": "GIT_UPSTREAM_URL",
+      "required": true,
+      "value": "https://github.com/taigaio/taiga-front.git"
+    },
+    {
+      "name": "GIT_UPSTREAM_REF",
+      "required": true,
+      "value": "3.2.1"
+    },
+    {
+      "name": "GIT_SCRIPTS_BASE_URL",
+      "required": true,
+      "value": "https://raw.githubusercontent.com/sheaphillips/taiga-front/v3.1.1/nodejs/.s2i/bin"
+    },
+    {
+      "name": "GIT_RUNTIME_URL",
+      "required": true,
+      "value": "https://github.com/sheaphillips/taiga-front"
+    },
+    {
+      "name": "GIT_RUNTIME_REF",
+      "required": true,
+      "value": "refs/heads/v3.1.1"
+    },
+    {
+      "name": "GIT_RUNTIME_NODEJS_CONTEXT_DIR",
+      "required": true,
+      "value": "nodejs"
+    },
+    {
+      "name": "GIT_RUNTIME_CADDY_CONTEXT_DIR",
+      "required": true,
+      "value": "caddy"
+    },
+    {
+      "name": "RUNTIME_OUTPUT_NAMESPACE",
+      "value": "devops-platform-support-tools"
+    }
+  ]
+}

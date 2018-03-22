@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# this assemble script will run "around" the standard caddy s2i s2i assemble script
+
+##where are we?
+echo "Current dir is $(pwd)"
+
+## what's in /tmp/src?
+echo "Contents of /tmp/src"
+find /tmp/src -print
+
+## what's in /tmp/src?
+echo "Contents of /opt/app-root/src"
+find /opt/app-root/src -print
+
+echo "Running default assemble script..."
+
+/usr/libexec/s2i/assemble
+rc=$?
+
+if [ $rc -eq 0 ]; then
+    echo "Default assemble succeeded."
+else
+    echo "Default assemble  failed."
+fi
+
+echo "Assemble done."
+
+exit $rc

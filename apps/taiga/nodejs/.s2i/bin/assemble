@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+echo "Starting custom nodejs assemble..."
+
+echo "Where are we?"
+CURRENT_DIR=$(pwd)
+
+echo "Current dir is ${CURRENT_DIR}"
+
+#echo "Finding the source..."
+
+#find /tmp -name \* -print
+
+echo "Installing rvm/ruby..."
+gpg2 --keyserver hkp://pgp.mit.edu:80 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+curl -sSL https://get.rvm.io | bash -s stable --ruby
+source ~/.profile
+gem install sass scss-lint
+export PATH="~/.gem/ruby/2.1.0/bin:$PATH"
+
+echo "Installing gulp..."
+npm install -g gulp
+
+echo "Where are we?"
+CURRENT_DIR=$(pwd)
+
+echo "Moving the source..."
+
+# move the application source
+mv /tmp/src/* /opt/app-root/src
+
+echo "Running npm install..."
+npm install
+
+echo "Running gulp deploy..."
+gulp deploy
+
+echo "Adding github plugin..."
+cd /opt/app-root/src/dist
+mkdir -p plugins/github-auth && curl -L https://github.com/taigaio/taiga-contrib-github-auth/tarball/3.1 | tar xz -C plugins/github-auth --strip-components=3 */front/dist
+
+echo "Assemble complete..."
+
