@@ -185,12 +185,12 @@
     {
       "name": "GIT_SCRIPTS_BASE_URL",
       "required": true,
-      "value": "https://raw.githubusercontent.com/sheaphillips/taiga-front/v3.1.1/nodejs/.s2i/bin"
+      "value": "https://raw.githubusercontent.com/BCDevOps/openshift-components/master/apps/taiga/nodejs/.s2i/bin"
     },
     {
       "name": "GIT_RUNTIME_URL",
       "required": true,
-      "value": "https://github.com/sheaphillips/taiga-front"
+      "value": "https://github.com/BCDevOps/openshift-components"
     },
     {
       "name": "GIT_RUNTIME_REF",
@@ -200,12 +200,12 @@
     {
       "name": "GIT_RUNTIME_NODEJS_CONTEXT_DIR",
       "required": true,
-      "value": "nodejs"
+      "value": "apps/taiga/nodejs"
     },
     {
       "name": "GIT_RUNTIME_CADDY_CONTEXT_DIR",
       "required": true,
-      "value": "caddy"
+      "value": "apps/taiga/caddy"
     },
     {
       "name": "RUNTIME_OUTPUT_NAMESPACE",
