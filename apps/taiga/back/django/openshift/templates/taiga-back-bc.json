@@ -60,7 +60,7 @@
               "paths": [
                 {
                   "sourcePath": "/opt/app-root/src/.",
-                  "destinationDir": "."
+                  "destinationDir": "${GIT_CONTEXT_DIR}"
                 }
               ]
             }
