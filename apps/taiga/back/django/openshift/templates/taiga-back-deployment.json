@@ -1,0 +1,397 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "taiga-back-deployment",
+    "creationTimestamp": null
+  },
+  "objects": [
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "generation": 1,
+        "creationTimestamp": null,
+        "labels": {
+          "app": "${NAME}",
+          "template": "taiga-back-deployment"
+        },
+        "annotations": {
+          "description": "Defines how to deploy the application server",
+          "template.alpha.openshift.io/wait-for-ready": "true"
+        }
+      },
+      "spec": {
+        "strategy": {
+          "type": "Recreate",
+          "recreateParams": {
+            "timeoutSeconds": 600
+          },
+          "resources": {},
+          "activeDeadlineSeconds": 21600
+        },
+        "triggers": [
+          {
+            "type": "ImageChange",
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "${NAME}"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "namespace": "${IMAGE_NAMESPACE}",
+                "name": "${IMAGE_NAME}:${IMAGE_TAG}"
+              }
+            }
+          },
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "replicas": 1,
+        "test": false,
+        "selector": {
+          "name": "${NAME}"
+        },
+        "template": {
+          "metadata": {
+            "name": "${NAME}",
+            "creationTimestamp": null,
+            "labels": {
+              "name": "${NAME}"
+            }
+          },
+          "spec": {
+            "volumes": [
+              {
+                "name": "${NAME}",
+                "persistentVolumeClaim": {
+                  "claimName": "${NAME}"
+                }
+              }
+            ],
+            "containers": [
+              {
+                "name": "${NAME}",
+                "image": " ",
+                "ports": [
+                  {
+                    "containerPort": 8080,
+                    "protocol": "TCP"
+                  }
+                ],
+                "env": [
+                  {
+                    "name": "DATABASE_SERVICE_NAME",
+                    "value": "${DATABASE_SERVICE_NAME}"
+                  },
+                  {
+                    "name": "DATABASE_ENGINE",
+                    "value": "postgresql"
+                  },
+                  {
+                    "name": "DATABASE_NAME",
+                    "value": "${DATABASE_NAME}"
+                  },
+                  {
+                    "name": "DATABASE_USER",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "${NAME}",
+                        "key": "database-user"
+                      }
+                    }
+                  },
+                  {
+                    "name": "DATABASE_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "${NAME}",
+                        "key": "database-password"
+                      }
+                    }
+                  },
+                  {
+                    "name": "DJANGO_SECRET_KEY",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "${NAME}",
+                        "key": "django-secret-key"
+                      }
+                    }
+                  },
+                  {
+                    "name": "WEB_CONCURRENCY",
+                    "value": "4"
+                  },
+                  {
+                    "name": "APP_CONFIG",
+                    "value": "gunicorn_config.py"
+                  },
+                  {
+                    "name": "TAIGA_FROM_EMAIL_ADDRESS",
+                    "value": "${FROM_EMAIL}"
+                  },
+                  {
+                    "name": "TAIGA_EMAIL_HOST",
+                    "value": "${EMAIL_HOST}"
+                  },
+                  {
+                    "name": "GITHUB_API_CLIENT_SECRET",
+                    "value": "${GITHUB_API_CLIENT_SECRET}"
+                  },
+                  {
+                    "name": "GITHUB_API_CLIENT_ID",
+                    "value": "${GITHUB_API_CLIENT_ID}"
+                  },
+                  {
+                    "name": "TAIGA_MEDIA_URL",
+                    "value": "${TAIGA_FRONT_SCHEME}://${TAIGA_FRONT_DOMAIN}/media/"
+                  },
+                  {
+                    "name": "TAIGA_STATIC_URL",
+                    "value": "${TAIGA_FRONT_SCHEME}://${TAIGA_FRONT_DOMAIN}/static/"
+                  },
+                  {
+                    "name": "TAIGA_FRONT_SCHEME",
+                    "value": "${TAIGA_FRONT_SCHEME}"
+                  },
+                  {
+                    "name": "TAIGA_FRONT_DOMAIN",
+                    "value": "${TAIGA_FRONT_DOMAIN}"
+                  },
+                  {
+                    "name": "DJANGO_SETTINGS_MODULE",
+                    "value": "settings.local"
+                  }
+                ],
+                "resources": {
+                  "limits": {
+                    "cpu": "2",
+                    "memory": "4Gi"
+                  },
+                  "requests": {
+                    "cpu": "2",
+                    "memory": "4Gi"
+                  }
+                },
+                "volumeMounts": [
+                  {
+                    "name": "${NAME}",
+                    "mountPath": "/opt/app-root/src/media",
+                    "subPath": "media"
+                  }
+                ],
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "imagePullPolicy": "IfNotPresent"
+              }
+            ],
+            "restartPolicy": "Always",
+            "terminationGracePeriodSeconds": 30,
+            "dnsPolicy": "ClusterFirst",
+            "securityContext": {},
+            "schedulerName": "default-scheduler"
+          }
+        }
+      },
+      "status": {
+        "latestVersion": 0,
+        "observedGeneration": 0,
+        "replicas": 0,
+        "updatedReplicas": 0,
+        "availableReplicas": 0,
+        "unavailableReplicas": 0
+      }
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "${NAME}",
+          "template": "taiga-back-deployment"
+        },
+        "annotations": {
+          "description": "Exposes and load balances the application pods",
+          "service.alpha.openshift.io/dependencies": "[{\"name\": \"${POSTGRES_SERVICE_NAME}\", \"kind\": \"Service\"}]"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "web",
+            "protocol": "TCP",
+            "port": 8080,
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "name": "${NAME}"
+        },
+        "type": "ClusterIP",
+        "sessionAffinity": "None"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "kind": "Route",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "${NAME}",
+          "template": "taiga-back-deployment"
+        }
+      },
+      "spec": {
+        "host": "${ROUTE_URL}",
+        "to": {
+          "kind": "Service",
+          "name": "${NAME}",
+          "weight": 100
+        },
+        "port": {
+          "targetPort": "web"
+        },
+        "tls": {
+          "termination": "edge",
+          "insecureEdgeTerminationPolicy": "Redirect"
+        },
+        "wildcardPolicy": "None"
+      }
+    },
+    {
+      "kind": "Secret",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "${NAME}",
+          "template": "taiga-back-deployment"
+        }
+      },
+      "stringData": {
+        "database-password": "${DATABASE_PASSWORD}",
+        "database-user": "${DATABASE_USER}",
+        "django-secret-key": "${DJANGO_SECRET_KEY}"
+      },
+      "type": "Opaque"
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "creationTimestamp": null,
+        "annotations": {
+          "volume.beta.kubernetes.io/storage-class": "manual-storage"
+        }
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "${STORAGE_SIZE}"
+          }
+        }
+      },
+      "status": {}
+    }
+  ],
+  "parameters": [
+    {
+      "name": "NAME",
+      "required": true,
+      "value": "taiga-back"
+    },
+    {
+      "name": "IMAGE_NAME",
+      "required": true,
+      "value": "taiga-back"
+    },
+    {
+      "name": "IMAGE_NAMESPACE",
+      "required": true,
+      "value": "devops-platform-support-tools"
+    },
+    {
+      "name": "IMAGE_TAG",
+      "required": true,
+      "value": "latest"
+    },
+    {
+      "name": "POSTGRES_SERVICE_NAME",
+      "required": true,
+      "value": "postgres"
+    },
+    {
+      "name": "FROM_EMAIL",
+      "required": true,
+      "value": "taiga@example.com"
+    },
+    {
+      "name": "EMAIL_HOST",
+      "required": true,
+      "value": "smtp.example.com"
+    },
+    {
+      "name": "DATABASE_SERVICE_NAME",
+      "required": true,
+      "value": "postgresql"
+    },
+    {
+      "name": "DATABASE_NAME",
+      "required": true,
+      "value": "taiga"
+    },
+    {
+      "name": "DATABASE_PASSWORD",
+      "required": true
+    },
+    {
+      "name": "DATABASE_USER",
+      "value": "taiga",
+      "required": true
+    },
+    {
+      "name": "DJANGO_SECRET_KEY",
+      "generate": "expression",
+      "from": "[a-zA-Z0-9]{16}",
+      "required": true
+    },
+    {
+      "name": "GITHUB_API_CLIENT_SECRET"
+    },
+    {
+      "name": "GITHUB_API_CLIENT_ID"
+    },
+    {
+      "name": "TAIGA_FRONT_SCHEME",
+      "value": "https"
+    },
+    {
+      "name": "TAIGA_FRONT_DOMAIN",
+      "required": true
+    },
+    {
+      "name": "ROUTE_URL",
+      "required": true
+    },
+    {
+      "name": "STORAGE_SIZE",
+      "required": true,
+      "value": "200Mi"
+    }
+  ]
+}

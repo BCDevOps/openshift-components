@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# this assemble script will run "around" the standard python/django s2i assemble script to do a couple of things:
+# - install some additional dependencies/plugins that we want for our deployment
+# - "overlay" some  deployment-related files that will help us deploy the app in OpenShift/k8s
+#
+
+##where are we?
+echo "Current dir is $(pwd)"
+
+## what's in /tmp/src?
+echo "Contents of /tmp/src"
+ls -la /tmp/src
+
+## what's in /tmp/src?
+echo "Contents of /opt/app-root/src"
+ls -la /opt/app-root/src
+
+echo "Combining requirements-extra.txt..."
+cat /tmp/src/requirements-extra.txt >> /tmp/src/requirements.txt
+
+echo "Cleaning up some files that will cause problems..."
+rm -rf /tmp/src/.pki
+rm /tmp/src/.rnd
+
+echo "Running default assemble script..."
+
+/usr/libexec/s2i/assemble
+rc=$?
+
+if [ $rc -eq 0 ]; then
+    echo "Default assemble succeeded."
+else
+    echo "Default assemble  failed."
+fi
+
+echo "Assemble done."
+
+exit $rc

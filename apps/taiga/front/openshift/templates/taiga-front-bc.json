@@ -186,7 +186,7 @@
     {
       "name": "GIT_UPSTREAM_REF",
       "required": true,
-      "value": "3.2.1"
+      "value": "3.2.2"
     },
     {
       "name": "GIT_SCRIPTS_BASE_URL",
@@ -206,12 +206,12 @@
     {
       "name": "GIT_RUNTIME_NODEJS_CONTEXT_DIR",
       "required": true,
-      "value": "apps/taiga/nodejs"
+      "value": "apps/taiga/front/nodejs"
     },
     {
       "name": "GIT_RUNTIME_CADDY_CONTEXT_DIR",
       "required": true,
-      "value": "apps/taiga/caddy"
+      "value": "apps/taiga/front/caddy"
     },
     {
       "name": "RUNTIME_OUTPUT_NAMESPACE",

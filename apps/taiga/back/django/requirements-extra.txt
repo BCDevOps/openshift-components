@@ -1,0 +1,2 @@
+taiga-contrib-github-auth==3.1
+gevent==1.2.2

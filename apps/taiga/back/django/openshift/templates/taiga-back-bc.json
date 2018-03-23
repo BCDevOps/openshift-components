@@ -1,0 +1,231 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "taiga-back-build",
+    "creationTimestamp": null
+  },
+  "objects": [
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "${NAME}",
+          "template": "taiga-back-build"
+        },
+        "annotations": {
+          "description": "Defines how to build the application",
+          "template.alpha.openshift.io/wait-for-ready": "true"
+        }
+      },
+      "spec": {
+        "triggers": [
+          {
+            "type": "GitHub",
+            "github": {
+              "secret": "${GITHUB_WEBHOOK_SECRET}"
+            }
+          },
+          {
+            "type": "ImageChange",
+            "imageChangeParams": {
+              "automatic": true,
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "taiga-back-upstream:latest"
+              }
+            }
+          },
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "runPolicy": "Serial",
+        "source": {
+          "type": "Git",
+          "contextDir": "${GIT_CONTEXT_DIR}",
+          "git": {
+            "uri": "${GIT_URL}",
+            "ref": "${GIT_REF}"
+          },
+          "images": [
+            {
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "taiga-back-upstream:latest"
+              },
+              "paths": [
+                {
+                  "sourcePath": "/opt/app-root/src/.",
+                  "destinationDir": "."
+                }
+              ]
+            }
+
+          ]
+        },
+        "strategy": {
+          "type": "Source",
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "openshift",
+              "name": "python:3.5"
+            },
+            "env": [
+              {
+                "name": "PIP_INDEX_URL"
+              }
+            ]
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "${NAME}:latest"
+          }
+        },
+        "resources": {
+          "limits": {
+            "cpu": "4",
+            "memory": "4Gi"
+          }
+        },
+        "nodeSelector": null
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "generation": 1,
+        "creationTimestamp": null,
+        "labels": {
+          "app": "${NAME}",
+          "template": "${NAME}"
+        },
+        "annotations": {
+          "description": "Keeps track of changes in the application image"
+        }
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "taiga-back-upstream",
+        "labels": {
+          "app": "taiga-back-upstream",
+          "template": "taiga-back-build"
+        },
+        "annotations": {
+          "description": "Defines how to build the application"
+        }
+      },
+      "spec": {
+        "runPolicy": "Serial",
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "${GIT_UPSTREAM_URL}",
+            "ref": "${GIT_UPSTREAM_REF}"
+          }
+        },
+        "strategy": {
+          "type": "Source",
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "openshift",
+              "name": "python:3.5"
+            },
+            "env": [
+              {
+                "name": "PIP_INDEX_URL"
+              }
+            ]
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "taiga-back-upstream:latest"
+          }
+        },
+        "resources": {
+          "limits": {
+            "cpu": "4",
+            "memory": "4Gi"
+          }
+        },
+        "postCommit": {
+          "script": "./manage.py test"
+        },
+        "nodeSelector": null
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "taiga-back-upstream",
+        "generation": 1,
+        "creationTimestamp": null,
+        "labels": {
+          "app": "taiga-back-upstream",
+          "template": "taiga-back-upstream"
+        },
+        "annotations": {
+          "description": "Keeps track of changes in the application image"
+        }
+      },
+      "spec": {
+        "lookupPolicy": {
+          "local": false
+        }
+      }
+    }
+  ],
+  "parameters": [
+    {
+      "name": "NAME",
+      "value": "taiga-back"
+    },
+    {
+      "name": "GITHUB_WEBHOOK_SECRET",
+      "generate": "expression",
+      "from": "[a-zA-Z0-9]{16}",
+      "required": true
+    },
+    {
+      "name": "GIT_URL",
+      "required": true,
+      "value": "https://github.com/BCDevOps/openshift-components"
+    },
+    {
+      "name": "GIT_REF",
+      "required": true,
+      "value": "master"
+    },
+    {
+      "name": "GIT_CONTEXT_DIR",
+      "required": true,
+      "value": "apps/taiga/back/django"
+    },
+    {
+      "name": "GIT_UPSTREAM_URL",
+      "required": true,
+      "value": "https://github.com/taigaio/taiga-back.git"
+    },
+    {
+      "name": "GIT_UPSTREAM_REF",
+      "required": true,
+      "value": "3.2.2"
+    }
+
+  ]
+}
