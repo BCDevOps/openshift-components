@@ -2,7 +2,7 @@
   "kind": "Template",
   "apiVersion": "v1",
   "metadata": {
-    "name": "true",
+    "name": "taiga-front-build-template",
     "creationTimestamp": null
   },
   "objects": [
@@ -160,14 +160,20 @@
       "kind": "ImageStream",
       "apiVersion": "v1",
       "metadata": {
-        "name": "taiga-front"
+        "name": "taiga-front",
+        "labels": {
+          "app": "taiga-front"
+        }
       }
     },
     {
       "kind": "ImageStream",
       "apiVersion": "v1",
       "metadata": {
-        "name": "taiga-front-runtime"
+        "name": "taiga-front-runtime",
+        "labels": {
+          "app": "taiga-front"
+        }
       }
     }
   ],
@@ -191,7 +197,7 @@
     {
       "name": "GIT_SCRIPTS_BASE_URL",
       "required": true,
-      "value": "https://raw.githubusercontent.com/BCDevOps/openshift-components/master/apps/taiga/nodejs/.s2i/bin"
+      "value": "https://raw.githubusercontent.com/BCDevOps/openshift-components/master/apps/taiga/front/nodejs/.s2i/bin"
     },
     {
       "name": "GIT_RUNTIME_URL",
