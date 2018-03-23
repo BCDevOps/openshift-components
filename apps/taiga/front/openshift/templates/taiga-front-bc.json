@@ -84,7 +84,13 @@
         "triggers": [
           {
             "type": "ImageChange",
-            "imageChange": {}
+            "imageChangeParams": {
+              "automatic": true,
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "taiga-front:latest"
+              }
+            }
           }
         ],
         "runPolicy": "Serial",
