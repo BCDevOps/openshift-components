@@ -1,8 +1,9 @@
-from django.contrib.auth.management.commands import createsuperuser
+from django.core.management.base import BaseCommand, CommandError
 from django.core.management import CommandError
+from django.core.management import call_command
+from django.contrib.auth import get_user_model
 
-
-class Command(createsuperuser.Command):
+class Command(BaseCommand):
     help = 'Crate a superuser, and allow password to be provided'
 
     def add_arguments(self, parser):
@@ -25,14 +26,14 @@ class Command(createsuperuser.Command):
             raise CommandError("--username is required if specifying --password")
 
         if username and options.get('preserve'):
-            exists = self.UserModel._default_manager.db_manager(database).filter(username=username).exists()
+            exists = get_user_model()._default_manager.db_manager(database).filter(username=username).exists()
             if exists:
                 self.stdout.write("User exists, exiting normally due to --preserve")
                 return
-
-        super(Command, self).handle(*args, **options)
+            else:
+                call_command('loaddata', 'initial_user')
 
         if password:
-            user = self.UserModel._default_manager.db_manager(database).get(username=username)
+            user = get_user_model()._default_manager.db_manager(database).get(username=username)
             user.set_password(password)
             user.save()
