@@ -8,6 +8,12 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         super(Command, self).add_arguments(parser)
+
+        parser.add_argument(
+            '--username', dest='username', default=None,
+            help='Specifies the username for the superuser.',
+        )
+
         parser.add_argument(
             '--password', dest='password', default=None,
             help='Specifies the password for the superuser.',
