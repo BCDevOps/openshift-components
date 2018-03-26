@@ -290,11 +290,7 @@
       "kind": "PersistentVolumeClaim",
       "apiVersion": "v1",
       "metadata": {
-        "name": "${NAME}",
-        "creationTimestamp": null,
-        "annotations": {
-          "volume.beta.kubernetes.io/storage-class": "manual-storage"
-        }
+        "name": "${NAME}"
       },
       "spec": {
         "accessModes": [
