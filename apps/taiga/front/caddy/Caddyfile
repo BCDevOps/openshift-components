@@ -20,9 +20,9 @@ rewrite / {
 }
 
 
-rewrite / {
+rewrite {
 	regexp .*
-	to {path} {path}/ /index.html
+	to {path} {path}/ /
 }
 
 templates {
