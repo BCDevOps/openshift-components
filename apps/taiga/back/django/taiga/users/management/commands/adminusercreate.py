@@ -31,13 +31,14 @@ class Command(BaseCommand):
         if password and not username:
             raise CommandError("--username is required if specifying --password")
 
-        if username and options.get('preserve'):
-            exists = get_user_model()._default_manager.db_manager(database).filter(username=username).exists()
-            if exists:
-                self.stdout.write("User exists, exiting normally due to --preserve")
-                return
-            else:
-                call_command('loaddata', 'initial_user')
+        if username:
+            if options.get('preserve'):
+                exists = get_user_model()._default_manager.db_manager(database).filter(username=username).exists()
+                if exists:
+                    self.stdout.write("User exists, exiting normally due to --preserve")
+                    return
+
+            call_command('loaddata', 'initial_user')
 
         if password:
             user = get_user_model()._default_manager.db_manager(database).get(username=username)
