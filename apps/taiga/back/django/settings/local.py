@@ -41,7 +41,7 @@ EMAIL_PORT = 25
 
 # requirements for github-auth plugin
 
-INSTALLED_APPS += ["taiga_contrib_github_auth"]
+INSTALLED_APPS += ["taiga_contrib_github_auth", "taiga.taiga_contrib_github_extended_auth"]
 
 # Get these from https://github.com/settings/developers
 GITHUB_API_CLIENT_ID = os.environ.get('GITHUB_API_CLIENT_ID', '')
