@@ -1,5 +1,5 @@
 from taiga_contrib_github_auth import connector
-from taiga_contrib_github_auth import github_login_func as delegate_login_func
+from taiga_contrib_github_auth.services import github_login_func as delegate_login_func
 import logging
 
 logger = logging.getLogger(__name__)

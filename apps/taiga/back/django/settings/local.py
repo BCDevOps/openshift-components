@@ -1,6 +1,11 @@
 from .common import *
 import os
 
+try:
+    from .logging import *
+except ImportError:
+    pass
+
 LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
 
 DATABASES = {
