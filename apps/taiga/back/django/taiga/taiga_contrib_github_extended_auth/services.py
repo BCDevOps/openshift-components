@@ -19,7 +19,7 @@ def github_login_func(request):
 
     email, user_info = connector.me(code)
 
-    if check_org_membership(user_info["username"], "BCDevOps"):
+    if check_org_membership(user_info.username, "BCDevOps"):
         return delegate_login_func(request)
     else:
         return None
