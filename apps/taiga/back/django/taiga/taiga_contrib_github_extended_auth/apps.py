@@ -4,7 +4,7 @@ from django.apps import AppConfig
 logger = logging.getLogger(__name__)
 
 class TaigaGithubExtendedAuthAppConfig(AppConfig):
-    name = "taiga_contrib_github_extended_auth"
+    name = "taiga.taiga_contrib_github_extended_auth"
     verbose_name = "Taiga contrib github extended auth App Config"
 
     def ready(self):
