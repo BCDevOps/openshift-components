@@ -54,3 +54,5 @@ GITHUB_API_CLIENT_SECRET = os.environ.get('GITHUB_API_CLIENT_SECRET', '')
 
 
 LOGGING['disable_existing_loggers'] = False
+
+TAIGA_GITHUB_EXTENDED_AUTH_ORG = os.environ.get('TAIGA_GITHUB_EXTENDED_AUTH_ORG ', None)
