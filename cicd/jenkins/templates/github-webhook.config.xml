@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+    <actions/>
+    <description></description>
+    <keepDependencies>false</keepDependencies>
+    <properties>
+        <jenkins.model.BuildDiscarderProperty>
+            <strategy class="hudson.tasks.LogRotator">
+                <daysToKeep>-1</daysToKeep>
+                <numToKeep>10</numToKeep>
+                <artifactDaysToKeep>-1</artifactDaysToKeep>
+                <artifactNumToKeep>-1</artifactNumToKeep>
+            </strategy>
+        </jenkins.model.BuildDiscarderProperty>
+        <hudson.model.ParametersDefinitionProperty>
+            <parameterDefinitions>
+                <hudson.model.StringParameterDefinition>
+                    <name>payload</name>
+                    <description>GitHub WebHook payload</description>
+                    <defaultValue></defaultValue>
+                </hudson.model.StringParameterDefinition>
+                <hudson.model.StringParameterDefinition>
+                    <name>x_github_event</name>
+                    <description>GitHub WebHook Event Type</description>
+                    <defaultValue></defaultValue>
+                </hudson.model.StringParameterDefinition>
+            </parameterDefinitions>
+        </hudson.model.ParametersDefinitionProperty>
+    </properties>
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+        <configVersion>2</configVersion>
+        <userRemoteConfigs>
+            <hudson.plugins.git.UserRemoteConfig>
+                <url>https://github.com/cvarjao/openshift-jenkins-tools.git</url>
+                <credentialsId>github-account</credentialsId>
+            </hudson.plugins.git.UserRemoteConfig>
+        </userRemoteConfigs>
+        <branches>
+            <hudson.plugins.git.BranchSpec>
+                <name>*/master</name>
+            </hudson.plugins.git.BranchSpec>
+        </branches>
+        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+        <submoduleCfg class="list"/>
+        <extensions>
+            <hudson.plugins.git.extensions.impl.CloneOption>
+                <shallow>true</shallow>
+                <noTags>true</noTags>
+                <reference></reference>
+                <depth>1</depth>
+                <honorRefspec>true</honorRefspec>
+            </hudson.plugins.git.extensions.impl.CloneOption>
+        </extensions>
+    </scm>
+    <canRoam>true</canRoam>
+    <disabled>false</disabled>
+    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <triggers>
+        <org.jenkinsci.plugins.gwt.GenericTrigger plugin="generic-webhook-trigger@1.30">
+            <spec></spec>
+            <regexpFilterText></regexpFilterText>
+            <regexpFilterExpression></regexpFilterExpression>
+            <genericRequestVariables>
+                <org.jenkinsci.plugins.gwt.GenericRequestVariable>
+                    <key>payload</key>
+                    <regexpFilter></regexpFilter>
+                </org.jenkinsci.plugins.gwt.GenericRequestVariable>
+            </genericRequestVariables>
+            <genericHeaderVariables>
+                <org.jenkinsci.plugins.gwt.GenericHeaderVariable>
+                    <key>x-github-event</key>
+                    <regexpFilter></regexpFilter>
+                </org.jenkinsci.plugins.gwt.GenericHeaderVariable>
+            </genericHeaderVariables>
+            <printPostContent>false</printPostContent>
+            <printContributedVariables>false</printContributedVariables>
+        </org.jenkinsci.plugins.gwt.GenericTrigger>
+    </triggers>
+    <concurrentBuild>false</concurrentBuild>
+    <builders>
+        <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.0">
+            <source class="hudson.plugins.groovy.StringSystemScriptSource">
+                <script plugin="script-security@1.41">
+                    <script>evaluate(new File(build.workspace.toString(), &quot;github-webhook/gh-webhook.groovy&quot;))</script>
+                    <sandbox>false</sandbox>
+                </script>
+            </source>
+        </hudson.plugins.groovy.SystemGroovy>
+    </builders>
+    <publishers/>
+    <buildWrappers/>
+</project>
