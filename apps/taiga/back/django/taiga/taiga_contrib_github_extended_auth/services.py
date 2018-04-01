@@ -26,8 +26,11 @@ def github_login_func(request):
     logger.error("github_login_func inside taiga_contrib_github_extended_auth....")
 
     code = request.DATA.get('code', None)
+    logger.error("code: {0}".format(code))
 
     email, user_info = connector.me(code)
+    logger.error("email: {0}".format(email))
+    logger.error("username: {0}".format(user_info.username))
 
     auth_info = connector.login(code)
 
@@ -35,8 +38,10 @@ def github_login_func(request):
     headers["Authorization"] = "token {}".format(auth_info.access_token)
 
     organization = getattr(settings, "TAIGA_GITHUB_EXTENDED_AUTH_ORG",  None)
+    logger.error("organization: {0}".format(organization))
 
     if organization and check_org_membership(user_info.username, organization, headers):
+        logger.error("checking membership...")
         return delegate_login_func(request)
     else:
         return None
