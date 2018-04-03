@@ -365,6 +365,11 @@
       "name": "GITHUB_API_CLIENT_ID"
     },
     {
+      "name": "TAIGA_GITHUB_EXTENDED_AUTH_ORG",
+      "description": "GitHub organization that user must be a member of in order to register.",
+      "required": true
+    },
+    {
       "name": "TAIGA_FRONT_SCHEME",
       "value": "https"
     },

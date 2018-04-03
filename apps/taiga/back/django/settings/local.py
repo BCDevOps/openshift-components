@@ -24,8 +24,18 @@ STATIC_URL = os.environ.get('TAIGA_STATIC_URL', '')
 SITES["front"]["scheme"] = os.environ.get('TAIGA_FRONT_SCHEME', '')
 SITES["front"]["domain"] = os.environ.get('TAIGA_FRONT_DOMAIN', '')
 
-DEBUG = False
-PUBLIC_REGISTER_ENABLED = True
+# disable public registration by default
+PUBLIC_REGISTER_ENABLED = os.environ.get('TAIGA_PUBLIC_REGISTER_ENABLED', False)
+
+if os.environ.get('TAIGA_GITHUB_AUTH_ENABLED', False):
+    # requirements for github-auth plugin
+    INSTALLED_APPS += ["taiga_contrib_github_auth", "taiga.taiga_contrib_github_extended_auth"]
+
+    # Get these from https://github.com/settings/developers
+    GITHUB_API_CLIENT_ID = os.environ.get('GITHUB_API_CLIENT_ID', '')
+    GITHUB_API_CLIENT_SECRET = os.environ.get('GITHUB_API_CLIENT_SECRET', '')
+
+    TAIGA_GITHUB_EXTENDED_AUTH_ORG = os.environ.get('TAIGA_GITHUB_EXTENDED_AUTH_ORG', None)
 
 DEFAULT_FROM_EMAIL = os.environ.get('TAIGA_FROM_EMAIL_ADDRESS', 'no-reply@example.com')
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
@@ -43,16 +53,3 @@ EMAIL_HOST = os.environ.get('TAIGA_EMAIL_HOST','')
 EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
 EMAIL_PORT = 25
-
-# requirements for github-auth plugin
-
-INSTALLED_APPS += ["taiga_contrib_github_auth", "taiga.taiga_contrib_github_extended_auth"]
-
-# Get these from https://github.com/settings/developers
-GITHUB_API_CLIENT_ID = os.environ.get('GITHUB_API_CLIENT_ID', '')
-GITHUB_API_CLIENT_SECRET = os.environ.get('GITHUB_API_CLIENT_SECRET', '')
-
-
-LOGGING['disable_existing_loggers'] = False
-
-TAIGA_GITHUB_EXTENDED_AUTH_ORG = os.environ.get('TAIGA_GITHUB_EXTENDED_AUTH_ORG', None)
