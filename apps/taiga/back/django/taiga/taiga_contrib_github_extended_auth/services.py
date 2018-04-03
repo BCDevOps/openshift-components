@@ -33,6 +33,7 @@ def github_login_func(request):
     logger.error("username: {0}".format(user_info.username))
 
     auth_info = connector.login(code)
+    logger.error("access token: {0}".format(auth_info.access_token))
 
     headers = connector.HEADERS.copy()
     headers["Authorization"] = "token {}".format(auth_info.access_token)
