@@ -6,6 +6,7 @@ from urllib.parse import urljoin
 from django.conf import settings
 import logging
 import requests
+from taiga.base import exceptions as exc
 
 logger = logging.getLogger(__name__)
 
@@ -44,19 +45,20 @@ def github_login_func(request):
     headers["Authorization"] = "token {}".format(auth_info.access_token)
 
     user_info = connector.get_user_profile(headers=headers)
-    logger.error("username: {0}".format(user_info.username))
+    username = user_info.username
+    logger.error("username: {0}".format(username))
 
     organization = getattr(settings, "TAIGA_GITHUB_EXTENDED_AUTH_ORG",  None)
     logger.error("organization: {0}".format(organization))
 
-    if organization and check_org_membership(user_info.username, organization, headers):
+    if organization and check_org_membership(username, organization, headers):
         logger.error("confirmed membership...")
 
         emails = connector.get_user_emails(headers=headers)
 
         primary_email = next(filter(lambda x: x.is_primary, emails))
 
-        user = github_register(username=user_info.username,
+        user = github_register(username=username,
                                email=primary_email,
                                full_name=user_info.full_name,
                                github_id=user_info.id,
@@ -65,4 +67,4 @@ def github_login_func(request):
 
         return make_auth_response_data(user)
     else:
-        return None
+        raise exc.PermissionDenied(detail="User {0} was not a member of GitHub organization {1} and is not permitted to register for access to this Taiga instance.".format(username, organization))
