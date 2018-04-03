@@ -72,7 +72,7 @@ Credentials c2 = (Credentials) new StringCredentialsImpl(
 
 SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), c2);
 
-
+/*
 def jsonSlurper = new groovy.json.JsonSlurper()
 def deployerCredentials = jsonSlurper.parseText(['sh', '-c', 'oc get secret/jenkins-deployer-credentials -o json'].execute().text)
 deployerCredentials.data.each { key, value ->
@@ -84,6 +84,7 @@ deployerCredentials.data.each { key, value ->
 
   SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), cred);
 }
+*/
 
 println "Configuring GitHub API"
 Jenkins.getInstance().getDescriptor(org.jenkinsci.plugins.github.config.GitHubPluginConfig.class)
