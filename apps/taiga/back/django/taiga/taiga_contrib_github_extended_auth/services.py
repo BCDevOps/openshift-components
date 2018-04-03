@@ -3,6 +3,7 @@ from taiga_contrib_github_auth.services import github_login_func as delegate_log
 from urllib.parse import urljoin
 from django.conf import settings
 import logging
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -14,12 +15,14 @@ def check_org_membership(github_id, org, headers:dict=connector.HEADERS):
     Get authenticated user organization membership.    
     """
     url = urljoin(connector.API_URL, "orgs/{0}/members/{1}".format(org, github_id))
-    try:
-        connector._get(url, headers=headers)
-        return True
-    except connector.GitHubApiError as error:
-        logger.error("User was not a member of GitHub organization {0}. Error was: {1}".format(org, error))
+
+    response = requests.get(url, headers=headers)
+    if response.status_code != 200:
+        logger.error("User was not a member of GitHub organization {0}.".format(org))
         return False
+    else:
+        return True
+
 
 
 def github_login_func(request):
