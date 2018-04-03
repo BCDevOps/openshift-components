@@ -28,15 +28,14 @@ def github_login_func(request):
     code = request.DATA.get('code', None)
     logger.error("code: {0}".format(code))
 
-    email, user_info = connector.me(code)
-    logger.error("email: {0}".format(email))
-    logger.error("username: {0}".format(user_info.username))
-
     auth_info = connector.login(code)
     logger.error("access token: {0}".format(auth_info.access_token))
 
     headers = connector.HEADERS.copy()
     headers["Authorization"] = "token {}".format(auth_info.access_token)
+
+    user_info = connector.get_user_profile(headers=headers)
+    logger.error("username: {0}".format(user_info.username))
 
     organization = getattr(settings, "TAIGA_GITHUB_EXTENDED_AUTH_ORG",  None)
     logger.error("organization: {0}".format(organization))
