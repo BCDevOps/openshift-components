@@ -1,5 +1,7 @@
 from taiga_contrib_github_auth import connector
 from taiga_contrib_github_auth.services import github_login_func as delegate_login_func
+from taiga_contrib_github_auth.services import github_register
+from taiga.auth.services import make_auth_response_data
 from urllib.parse import urljoin
 from django.conf import settings
 import logging
@@ -32,6 +34,9 @@ def github_login_func(request):
     code = request.DATA.get('code', None)
     logger.error("code: {0}".format(code))
 
+    token = request.DATA.get('token', None)
+    logger.error("token: {0}".format(token))
+
     auth_info = connector.login(code)
     logger.error("access token: {0}".format(auth_info.access_token))
 
@@ -46,6 +51,18 @@ def github_login_func(request):
 
     if organization and check_org_membership(user_info.username, organization, headers):
         logger.error("confirmed membership...")
-        return delegate_login_func(request)
+
+        emails = connector.get_user_emails(headers=headers)
+
+        primary_email = next(filter(lambda x: x.is_primary, emails))
+
+        user = github_register(username=user_info.username,
+                               email=primary_email,
+                               full_name=user_info.full_name,
+                               github_id=user_info.id,
+                               bio=user_info.bio,
+                               token=token)
+
+        return make_auth_response_data(user)
     else:
         return None
