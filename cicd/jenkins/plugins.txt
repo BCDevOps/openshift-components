@@ -106,7 +106,6 @@ blueocean-events:1.4.2
 blueocean-git-pipeline:1.4.2
 blueocean-github-pipeline:1.4.2
 blueocean:1.4.2
-#build-token-root:1.4
 startup-trigger-plugin:2.8
 disable-github-multibranch-status:1.1
 generic-webhook-trigger:1.30
