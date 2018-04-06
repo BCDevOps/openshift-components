@@ -46,7 +46,7 @@ RUN yum repolist > /dev/null && \
     rpm -e --nodeps redhat-logos && \
     yum clean all -y
     
-RUN curl --silent --location https://rpm.nodesource.com/setup_6.x | sudo bash - && \
+RUN curl --silent --location https://rpm.nodesource.com/setup_6.x | bash - && \
     yum install -y yarn
 
 # In order to drop the root user, we have to make some directories world
