@@ -46,8 +46,7 @@ RUN yum repolist > /dev/null && \
     rpm -e --nodeps redhat-logos && \
     yum clean all -y
     
-RUN curl --silent --location https://rpm.nodesource.com/setup_6.x | bash - && \
-    yum install -y yarn
+RUN npm install --global yarn
 
 # In order to drop the root user, we have to make some directories world
 # writable as OpenShift default security model is to run the container under
