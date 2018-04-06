@@ -45,8 +45,6 @@ RUN yum repolist > /dev/null && \
     # Remove redhat-logos (httpd dependency) to keep image size smaller.
     rpm -e --nodeps redhat-logos && \
     yum clean all -y
-    
-RUN npm install --global yarn
 
 # In order to drop the root user, we have to make some directories world
 # writable as OpenShift default security model is to run the container under
