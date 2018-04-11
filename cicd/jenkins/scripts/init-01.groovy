@@ -128,8 +128,11 @@ if (jenkinsConfig.projects) {
     for (Map param:projectCfg.template.parameters){
       configXml = configXml.replaceAll(java.util.regex.Pattern.quote("#{${param.name}}"), param.value);
     }
-    InputStream configXmlInputStream = new ByteArrayInputStream(configXml.getBytes(StandardCharsets.UTF_8));
-    Jenkins.instance.createProjectFromXML(projectName, configXmlInputStream);
+    if (Jenkins.instance.getItem(projectName) == null) {
+      InputStream configXmlInputStream = new ByteArrayInputStream(configXml.getBytes(StandardCharsets.UTF_8));
+      Jenkins.instance.createProjectFromXML(projectName, configXmlInputStream);
+    }
+    //TODO: Handle update
   }
   Jenkins.getInstance().save()
 }
