@@ -20,6 +20,7 @@ oc set volume dc/jenkins --add --name=jenkins-jobs  -m /var/lib/jenkins/jobs -t 
 
 
 # References:
+
 https://github.com/openshift/jenkins
 https://github.com/jenkinsci/github-plugin/blob/master/src/main/java/com/cloudbees/jenkins/GitHubWebHook.java
 https://github.com/jenkinsci/build-token-root-plugin/pull/16
