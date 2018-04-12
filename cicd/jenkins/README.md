@@ -5,7 +5,7 @@
 #import jenkins base image and create ImageStream
 oc import-image jenkins-2-rhel7:v3.7 --from=registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.7 --confirm
 
-oc new-build jenkins-2-rhel7:v3.7~https://github.com/cvarjao/openshift-components.git --context-dir=cicd/jenkins --name=jenkins
+oc new-build jenkins-2-rhel7:v3.7~https://github.com/BCDevOps/openshift-components.git --context-dir=cicd/jenkins --name=jenkins
 oc new-app jenkins-ephemeral -p NAMESPACE= -p JENKINS_IMAGE_STREAM_TAG=jenkins:latest --name=jenkins
 
 oc set resources dc/jenkins --limits=cpu=2000m,memory=4Gi --requests=cpu=1000m,memory=1Gi
