@@ -16,11 +16,12 @@ def check_org_membership(github_id, org, headers:dict=connector.HEADERS):
     """
     Get authenticated user organization membership.    
     """
-    url = urljoin(connector.API_URL, "orgs/{0}/members/{1}".format(org, github_id))
+
+    url = urljoin(connector.API_URL, "orgs/{0}/memberships/{1}".format(org, github_id))
     logger.debug("Checking via URL {0}.".format(url))
 
     response = requests.get(url, headers=headers)
-    if response.status_code not in [204]:
+    if response.status_code not in [200]:
         logger.debug("User was not a member of GitHub organization {0}.Status was {1}".format(org, response.status_code))
         return False
     else:
