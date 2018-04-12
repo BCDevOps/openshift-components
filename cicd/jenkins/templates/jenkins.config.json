@@ -1,0 +1,30 @@
+{
+  "init.url": [
+    "https://raw.githubusercontent.com/cvarjao/openshift-components/master/cicd/jenkins/scripts/init-00.groovy",
+    "https://raw.githubusercontent.com/cvarjao/openshift-components/master/cicd/jenkins/scripts/init-01.groovy"
+  ],
+  "projects":{
+    "bcgov-eao-inspections-web":{
+      "template":{
+        "source": "https://raw.githubusercontent.com/cvarjao/openshift-components/master/cicd/jenkins/templates/workflow-multibranch.template.xml",
+        "parameters":[
+          {"name":"REPO_OWNER", "value":"bcgov"},
+          {"name":"REPO_NAME", "value":"eao-inspections-web"}
+        ]
+      }
+    }
+  },
+  "github-account.secret.name": "github-credentials",
+  "globalLibraries":[
+    {
+      "name": "csnr-openshift-jenkins-shared-library",
+      "scm": {
+        "url": "https://github.com/cvarjao/openshift-jenkins-library.git"
+      },
+      "defaultVersion": "master",
+      "implicit": true,
+      "allowVersionOverride": true,
+      "includeInChangesets": true
+    }
+  ]
+}

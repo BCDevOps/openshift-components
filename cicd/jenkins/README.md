@@ -1,19 +1,19 @@
 # s2i-jenkins
 
 ```
+
+#import jenkins base image and create ImageStream
 oc import-image jenkins-2-rhel7:v3.7 --from=registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.7 --confirm
-oc new-build registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.7~https://github.com/cvarjao/s2i-jenkins.git --name=jenkins
 
-#save a coy of the template
-#oc get template -n openshift jenkins-ephemeral -o json > jenkins-ephemeral.json
-#oc process -f jenkins-ephemeral.json -p NAMESPACE=csnr-devops-lab-tools -p JENKINS_IMAGE_STREAM_TAG=jenkins:latest | oc create -f -
+oc new-build jenkins-2-rhel7:v3.7~https://github.com/cvarjao/openshift-components.git --context-dir=cicd/jenkins --name=jenkins
+oc new-app jenkins-ephemeral -p NAMESPACE= -p JENKINS_IMAGE_STREAM_TAG=jenkins:latest --name=jenkins
 
-oc new-app jenkins-ephemeral -p NAMESPACE= -p JENKINS_IMAGE_STREAM_TAG=jenkins:latest --name=jenkins2 --dry-run
+oc set resources dc/jenkins --limits=cpu=2000m,memory=4Gi --requests=cpu=1000m,memory=1Gi
+oc set volume dc/jenkins --remove --name=jenkins-data
 
-oc set env dc/registry --overwrite STORAGE=/opt
+oc set volume dc/jenkins --add --name=jenkins-jobs  -m /var/lib/jenkins/jobs -t pvc --claim-name=jenkins-jobs --claim-class=gluster-file --claim-mode=ReadWriteOnce --claim-size=1G --overwrite
 
 
-oc set resources deployment jenkins --limits=cpu=2000m,memory=2Gi --requests=cpu=1000m,memory=1Gi
 
 ```
 
