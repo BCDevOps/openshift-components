@@ -17,9 +17,9 @@
   "github-account.secret.name": "github-credentials",
   "globalLibraries":[
     {
-      "name": "csnr-openshift-jenkins-shared-library",
+      "name": "devops-helpers-lib",
       "scm": {
-        "url": "https://github.com/cvarjao/openshift-jenkins-library.git"
+        "url": "https://github.com/cvarjao/jenkins-pipeline-shared-lib.git"
       },
       "defaultVersion": "master",
       "implicit": true,
