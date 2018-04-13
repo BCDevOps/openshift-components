@@ -29,6 +29,28 @@ def check_org_membership(github_id, org, headers:dict=connector.HEADERS):
         return True
 
 
+# a twiddled replacement for the login method in taiga-contrib-github-auth/connector.py that requests a broader scope
+def login(access_code:str, client_id: str=connector.CLIENT_ID, client_secret: str=connector.CLIENT_SECRET,
+          headers: dict=connector.HEADERS):
+    """
+    Get access_token fron an user authorized code, the client id and the client secret key.
+    (See https://developer.github.com/v3/oauth/#web-application-flow).
+    """
+    if not connector.CLIENT_ID or not connector.CLIENT_SECRET:
+        raise connector.GitHubApiError({"error_message": _("Login with github account is disabled. Contact "
+                                                 "with the sysadmins. Maybe they're snoozing in a "
+                                                 "secret hideout of the data center.")})
+
+    url = urljoin(connector.URL, "login/oauth/access_token")
+
+    # note -> scope: read:user instead of "user:email"; required to determine *private* org membership
+    params={"code": access_code,
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "scope": "read:user"}
+    data = connector._post(url, params=params, headers=headers)
+    return connector.AuthInfo(access_token=data.get("access_token", None))
+
 
 def github_login_func(request):
     logger.debug("Attempting login using taiga_contrib_github_extended_auth plugin....")
@@ -36,7 +58,7 @@ def github_login_func(request):
     code = request.DATA.get('code', None)
     token = request.DATA.get('token', None)
 
-    auth_info = connector.login(code)
+    auth_info = login(code)
 
     headers = connector.HEADERS.copy()
     headers["Authorization"] = "token {}".format(auth_info.access_token)
