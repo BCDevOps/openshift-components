@@ -19,6 +19,7 @@ def check_org_membership(github_id, org, headers:dict=connector.HEADERS):
 
     url = urljoin(connector.API_URL, "orgs/{0}/memberships/{1}".format(org, github_id))
     logger.debug("Checking via URL {0}.".format(url))
+    logger.debug("Headers: {0}".format(headers))
 
     response = requests.get(url, headers=headers)
     if response.status_code not in [200]:
