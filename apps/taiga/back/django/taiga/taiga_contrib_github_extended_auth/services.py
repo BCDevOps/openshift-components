@@ -47,7 +47,7 @@ def github_login_func(request):
     organization = getattr(settings, "TAIGA_GITHUB_EXTENDED_AUTH_ORG",  None)
     logger.debug("organization: {0}".format(organization))
 
-    if organization and check_org_membership(username, organization, headers):
+    if organization and check_org_membership(username, organization, headers=headers):
         logger.debug("confirmed membership...")
 
         emails = connector.get_user_emails(headers=headers)
