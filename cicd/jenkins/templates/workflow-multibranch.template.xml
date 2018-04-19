@@ -39,10 +39,10 @@
               <strategyId>1</strategyId>
             </org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait>
             <org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait>
-              <strategyId>1</strategyId>
+              <strategyId>2</strategyId>
             </org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait>
             <org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait>
-              <strategyId>1</strategyId>
+              <strategyId>2</strategyId>
               <trust class="org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$TrustContributors"/>
             </org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait>
             <jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait plugin="scm-api@2.2.6">
@@ -58,6 +58,10 @@
                 <honorRefspec>true</honorRefspec>
               </extension>
             </jenkins.plugins.git.traits.CloneOptionTrait>
+            <com.adobe.jenkins.disable__github__multibranch__status.DisableStatusUpdateTrait plugin="disable-github-multibranch-status@1.1"/>
+            <jenkins.plugins.git.traits.WipeWorkspaceTrait plugin="git@3.8.0">
+              <extension class="hudson.plugins.git.extensions.impl.WipeWorkspace"/>
+            </jenkins.plugins.git.traits.WipeWorkspaceTrait>
             <jenkins.plugins.git.traits.RefSpecsSCMSourceTrait plugin="git@3.8.0">
               <templates>
                 <jenkins.plugins.git.traits.RefSpecsSCMSourceTrait_-RefSpecTemplate>
