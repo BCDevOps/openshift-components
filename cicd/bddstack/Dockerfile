@@ -4,7 +4,10 @@ EXPOSE 8080
 
 ENV PATH=$HOME/.local/bin/:$PATH \
     LC_ALL=en_US.UTF-8 \
-    LANG=en_US.UTF-8
+    LANG=en_US.UTF-8 \
+    BASH_ENV=/usr/local/bin/scl_enable \
+    ENV=/usr/local/bin/scl_enable \
+    PROMPT_COMMAND=". /usr/local/bin/scl_enable"
    
 ENV SUMMARY="Jenkins slave with chrome and firefox installed for use with functional/BDD tests that use BDDStack." \
     DESCRIPTION="Jenkins pipeline slave with chrome and firefox for testing application with headless browser. (aka 'BDDStack')"
@@ -43,4 +46,6 @@ RUN yum repolist > /dev/null && \
 
 ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
 
+# . /opt/rh/rh-nodejs6/enable
+ 
 USER 1001
