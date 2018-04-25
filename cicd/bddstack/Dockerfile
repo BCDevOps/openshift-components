@@ -47,5 +47,9 @@ RUN yum repolist > /dev/null && \
 ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
 
 # . /opt/rh/rh-nodejs6/enable
- 
+ENV PATH=/opt/rh/rh-nodejs6/root/usr/bin${PATH:+:${PATH}} \
+    LD_LIBRARY_PATH=/opt/rh/rh-nodejs6/root/usr/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}} \
+    PYTHONPATH=/opt/rh/rh-nodejs6/root/usr/lib/python2.7/site-packages${PYTHONPATH:+:${PYTHONPATH}} \
+    MANPATH=/opt/rh/rh-nodejs6/root/usr/share/man:$MANPATH
+    
 USER 1001
