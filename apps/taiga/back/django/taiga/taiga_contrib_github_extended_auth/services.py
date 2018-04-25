@@ -22,7 +22,7 @@ def check_org_membership(github_id, org, headers:dict=connector.HEADERS):
     logger.debug("Headers: {0}".format(headers))
 
     response = requests.get(url, headers=headers)
-    if response.status_code not in [302]:
+    if response.status_code not in [204, 302]:
         logger.debug("User was not a member of GitHub organization {0}.Status was {1}".format(org, response.status_code))
         return False
     else:
