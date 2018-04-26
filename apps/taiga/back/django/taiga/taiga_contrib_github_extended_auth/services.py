@@ -77,6 +77,8 @@ def github_login_func(request):
 
         primary_email = next(filter(lambda x: x.is_primary, emails))
 
+        logger.debug("Primary email is {}".format(primary_email))
+
         user = github_register(username=username,
                                email=primary_email,
                                full_name=user_info.full_name,
