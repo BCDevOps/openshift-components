@@ -75,7 +75,7 @@ def github_login_func(request):
 
         emails = connector.get_user_emails(headers=headers)
 
-        primary_email = next(filter(lambda x: x.is_primary, emails))
+        primary_email = next(filter(lambda x: x.is_primary, emails)).email
 
         logger.debug("Primary email is {}".format(primary_email))
 
