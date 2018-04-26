@@ -47,7 +47,7 @@ def login(access_code:str, client_id: str=connector.CLIENT_ID, client_secret: st
     params={"code": access_code,
             "client_id": client_id,
             "client_secret": client_secret,
-            "scope": "read:user"}
+            "scope": "user:emails"}
     data = connector._post(url, params=params, headers=headers)
     return connector.AuthInfo(access_token=data.get("access_token", None))
 
