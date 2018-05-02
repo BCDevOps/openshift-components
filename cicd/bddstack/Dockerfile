@@ -16,6 +16,8 @@ LABEL summary="$SUMMARY" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,jenkins-jnlp-chrome,jenkins-jnlp-firefox,jenkins-jnlp" \
       release="1"
+      
+COPY contrib/bin/scl_enable /usr/local/bin/scl_enable
 
 # NOTES:
 # We need to call 2 (!) yum commands before being able to enable repositories properly
