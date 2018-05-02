@@ -56,8 +56,8 @@ ENV PATH=/opt/rh/rh-nodejs6/root/usr/bin${PATH:+:${PATH}} \
 # package installs in a ci environment. Also, install the `yarn` package
 # manager and node security project (`nsp`) CLI tool.
 RUN source scl_source enable rh-nodejs6 && \
-    npm i -g npm@latest && \
     rm -rf ~/.npm && \
+    npm i -g npm@latest && \
     npm i -g yarn@latest && \
     npm i -g nsp@latest && \
     rm -rf ~/.npm
