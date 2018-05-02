@@ -52,6 +52,7 @@ ENV PATH=/opt/rh/rh-nodejs6/root/usr/bin${PATH:+:${PATH}} \
 # package installs in a ci environment. It also cleans the package
 # cache.
 RUN npm i -g npm@latest && \
+    rm -rf ~/.npm && \
     npm i -g yarn@latest && \
     npm i -g nsp@latest && \
     rm -rf ~/.npm
