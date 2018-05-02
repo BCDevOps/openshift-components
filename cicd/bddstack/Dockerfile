@@ -53,7 +53,8 @@ ENV PATH=/opt/rh/rh-nodejs6/root/usr/bin${PATH:+:${PATH}} \
 # version that supports the `ci` option. This will greatly speed up
 # package installs in a ci environment. It also cleans the package
 # cache.
-RUN npm i -g yarn@latest && \
+RUN source scl_source enable rh-nodejs6 && \
+    npm i -g yarn@latest && \
     npm i -g nsp@latest && \
     rm -rf ~/.npm
     
