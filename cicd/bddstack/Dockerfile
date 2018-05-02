@@ -53,7 +53,7 @@ ENV PATH=/opt/rh/rh-nodejs6/root/usr/bin${PATH:+:${PATH}} \
 # cache.
 RUN npm i -g npm@latest && \
     npm i -g yarn@latest && \
-    npm i -g nsp@latest &&   
+    npm i -g nsp@latest && \
     rm -rf ~/.npm
     
 ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
