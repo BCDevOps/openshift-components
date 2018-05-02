@@ -41,20 +41,21 @@ RUN yum repolist > /dev/null && \
     if [ ! -d /home/jenkins/.pki ] ; then mkdir /home/jenkins/.pki; fi && \
     chmod 777 /home/jenkins/.pki
 
-# Update `npm` past what is supplied in `rh-nodejs6` to a more mondern
-# version that supports the `ci` option. This will greatly speed up
-# package installs in a ci environment. It also cleans the package
-# cache.
-RUN npm i -g npm@latest && \
-    npm i -g yarn@latest && \
-    rm -rf ~/.npm
-    
-ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
-
 # . /opt/rh/rh-nodejs6/enable
 ENV PATH=/opt/rh/rh-nodejs6/root/usr/bin${PATH:+:${PATH}} \
     LD_LIBRARY_PATH=/opt/rh/rh-nodejs6/root/usr/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}} \
     PYTHONPATH=/opt/rh/rh-nodejs6/root/usr/lib/python2.7/site-packages${PYTHONPATH:+:${PYTHONPATH}} \
     MANPATH=/opt/rh/rh-nodejs6/root/usr/share/man:$MANPATH
     
+# Update `npm` past what is supplied in `rh-nodejs6` to a more mondern
+# version that supports the `ci` option. This will greatly speed up
+# package installs in a ci environment. It also cleans the package
+# cache.
+RUN npm i -g npm@latest && \
+    npm i -g yarn@latest && \
+    npm i -g nsp@latest &&   
+    rm -rf ~/.npm
+    
+ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
+
 USER 1001
