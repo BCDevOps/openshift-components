@@ -46,9 +46,12 @@ RUN yum repolist > /dev/null && \
     rpm -e --nodeps redhat-logos && \
     yum clean all -y
 
-# Update `npm` to a more mondern version that supports the `ci` option.
-# This will greatly speed up package installs in a ci environment.
-RUN npm i -g npm@latest
+# Update `npm` past what is supplied in `rh-nodejs6` to a more mondern
+# version that supports the `ci` option. This will greatly speed up
+# package installs in a ci environment. It also cleans the package
+# cache.
+RUN npm i -g npm@latest && \
+    rm -rf ~/.npm
 
 # In order to drop the root user, we have to make some directories world
 # writable as OpenShift default security model is to run the container under
