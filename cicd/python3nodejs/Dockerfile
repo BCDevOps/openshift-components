@@ -48,9 +48,10 @@ RUN yum repolist > /dev/null && \
 
 # Update `npm` past what is supplied in `rh-nodejs6` to a more mondern
 # version that supports the `ci` option. This will greatly speed up
-# package installs in a ci environment. It also cleans the package
-# cache.
-RUN npm i -g npm@latest && \
+# package installs in a ci environment. Also, install the `yarn` package
+# manager and node security project (`nsp`) CLI tool.
+RUN /usr/local/bin/scl_enable && \
+    npm i -g npm@latest yarn@latest nsp@latest && \
     rm -rf ~/.npm
 
 # In order to drop the root user, we have to make some directories world
