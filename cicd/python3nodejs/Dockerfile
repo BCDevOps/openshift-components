@@ -55,8 +55,11 @@ ENV PATH=/opt/rh/rh-nodejs6/root/usr/bin${PATH:+:${PATH}} \
 # version that supports the `ci` option. This will greatly speed up
 # package installs in a ci environment. Also, install the `yarn` package
 # manager and node security project (`nsp`) CLI tool.
-RUN /usr/local/bin/scl_enable && \
-    npm i -g npm@latest yarn@latest nsp@latest && \
+RUN source scl_source enable rh-nodejs6 && \
+    npm i -g npm@latest && \
+    rm -rf ~/.npm && \
+    npm i -g yarn@latest && \
+    npm i -g nsp@latest && \
     rm -rf ~/.npm
 
 # In order to drop the root user, we have to make some directories world
