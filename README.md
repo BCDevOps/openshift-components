@@ -27,12 +27,16 @@ This image contains Python 3 and support tools like
 
 __Python 3 & node.js 6.11__
 
-This image contains Python 3 (with `pip`) and node.js 6.11 with the
-latest `npm` (> 6.0.0), `yarn`, and `nsp` cli tools installed
-globally. 
+This image contains Python 3 (with `pip`) and RedHat node.js 6.11 (with `npm`).
+
+__node.js 6.11__
+
+This image contains __stock__ node.js 6.11 with the
+latest `npm` (>= 6.0.0), `yarn`, and `nsp` cli tools installed
+globally; see NODE_HOME to find installed components.
 
 npm > 5.7.0 has the `ci` option that greatly increases
-package install in a ci environment.
+package install in a ci environment. Consider using it!
 
 __Sonar__
 
