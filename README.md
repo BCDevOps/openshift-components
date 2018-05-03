@@ -38,6 +38,9 @@ globally; see NODE_HOME to find installed components.
 npm > 5.7.0 has the `ci` option that greatly increases
 package install in a ci environment. Consider using it!
 
+Image Reference
+172.50.0.2:5000/openshift/jenkins-slave-node6:latest
+
 __Sonar__
 
 __Zap__
