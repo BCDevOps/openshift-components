@@ -12,6 +12,32 @@ Templates for build / deployment and useful support applications
 
 Docker files to build Jenkins builder images
 
+__Android__
+
+This image contains OpenJSK >= 1.8.0 and the Android
+SDK manager / tools for `gradle` builds. See the
+Docker file for more precise version information.
+
+__BDD Stack__
+
+__Python3__
+
+This image contains Python 3 and support tools like
+`pip`.
+
+__Python 3 & node.js 6.11__
+
+This image contains Python 3 (with `pip`) and node.js 6.11 with the
+latest `npm` (> 6.0.0), `yarn`, and `nsp` cli tools installed
+globally. 
+
+npm > 5.7.0 has the `ci` option that greatly increases
+package install in a ci environment.
+
+__Sonar__
+
+__Zap__
+
 ## db
 
 Docker files to build data storage images
