@@ -14,9 +14,12 @@ oc set resources dc/jenkins --limits=cpu=2000m,memory=4Gi --requests=cpu=1000m,m
 oc set volume dc/jenkins --remove --name=jenkins-data
 oc set volume dc/jenkins --add --name=jenkins-jobs  -m /var/lib/jenkins/jobs -t pvc --claim-name=jenkins-jobs --claim-class=gluster-file --claim-mode=ReadWriteOnce --claim-size=1G --overwrite
 
-
-
 ```
+
+# Prerequisites:
+- configMaps/jenkins
+- secrets/github-account
+
 
 
 # References:
