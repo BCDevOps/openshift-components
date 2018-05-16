@@ -2,8 +2,7 @@
 
 This repository can be used for chained builds that require Oracle Instant Client software RPM's.
 The docker image is a base rhl7 image containing the oracle rpms.
-The cahined build siply copies the oracle rpms from this image and installs it. 
-This way we don't store oracle rpms on github. 
+The chained build simply copies the oracle rpms from this image and installs it. 
 
 
 ## Source ##
