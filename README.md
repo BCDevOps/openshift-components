@@ -50,3 +50,40 @@ __Zap__
 Docker files to build data storage images
 
 - **PostGIS** RHEL7 PostgreSQL 9.6 base image with PostGIS 2.4 extension(s). 
+
+# How To
+
+These images are manually built (and rebuild) when the Jenkins slave image
+is updated. Contact your friendly neighbourhood DevOps lead if you need something
+built or keep reading to do-it-yourself.
+
+To build your own image, and add it to the registry, *but* keep it private to your
+image stream(s) you can use the OpenShift `build.json` template in this repo
+with the following command (make sure you're in tools ;) ):
+
+
+```console
+oc process -f build.json \
+-p NAME=jenkins-slave-node6 \
+-p GIT_REPO_URL=https://github.com/BCDevOps/openshift-components.git \
+-p SOURCE_CONTEXT_DIR=cicd/node6 | oc replace -f -
+```
+
+| Parameter          | Optional      | Description   |
+| ------------------ | ------------- | ------------- |
+| NAME               | NO            | The name of your image |
+| GIT_REPO_URL       | YES           | The location of the repository |
+| SOURCE_CONTEXT_DIR | YES           | The path to the Dockerfile |
+
+You normally dont need to change `GIT_REPO_URL` unless you've cloned the repo
+and have added or changed Dockerfiles.
+
+You can then check the Web GUI or use `oc get builds` to see the build progress.
+When done you'll have a newly minted Docker image you can use; just reference
+the image from your own image stream rather than OpenShift For example:
+
+| Image Stream       | Reference   |
+| ------------------ | ----------- |
+| OpenShift          | `172.50.0.2:5000/openshift/jenkins-slave-node6` |
+| Your Project       | `172.50.0.2:5000/mycool-project-tools/jenkins-slave-node6` |
+
