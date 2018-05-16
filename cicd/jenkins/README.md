@@ -14,7 +14,7 @@ oc set resources dc/jenkins --limits=cpu=2000m,memory=4Gi --requests=cpu=1000m,m
 oc set volume dc/jenkins --remove --name=jenkins-data
 oc set volume dc/jenkins --add --name=jenkins-jobs  -m /var/lib/jenkins/jobs -t pvc --claim-name=jenkins-jobs --claim-class=gluster-file --claim-mode=ReadWriteOnce --claim-size=1G --overwrite
 
-oc set env dc/jenkins 'JAVA_OPTS=-XX:+PrintFlagsFinal -XX:MaxMetaspaceSize=2g'
+oc set env dc/jenkins 'JENKINS_JAVA_OVERRIDES=-Dhudson.model.DirectoryBrowserSupport.CSP='
 
 ```
 
