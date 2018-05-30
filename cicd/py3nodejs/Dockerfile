@@ -19,7 +19,12 @@ ENV SUMMARY="Jenkins slave with python 3 and nodejs 6" \
     PATH=/opt/rh/rh-nodejs6/root/usr/bin${PATH:+:${PATH}} \
     LD_LIBRARY_PATH=/opt/rh/rh-nodejs6/root/usr/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}} \
     PYTHONPATH=/opt/rh/rh-nodejs6/root/usr/lib/python2.7/site-packages${PYTHONPATH:+:${PYTHONPATH}} \
-    MANPATH=/opt/rh/rh-nodejs6/root/usr/share/man:$MANPATH
+    MANPATH=/opt/rh/rh-nodejs6/root/usr/share/man:$MANPATH \
+    OPENSHIFT_JENKINS_JVM_ARCH=x86_64 \
+    PATH=/zap:$PATH \
+    ZAP_PATH=/zap/zap.sh \
+    ZAP_PORT=8080 \
+    HOME=/var/lib/jenkins
 
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
@@ -64,6 +69,63 @@ RUN yum repolist > /dev/null && \
     rm -rf ~/.npm && \
     mkdir -p /opt/app-root  && \
     chown -R 1001:0 /opt/app-root && \
-    chmod -R og+rwx /opt/app-root 
-    
+    chmod -R og+rwx /opt/app-root && \ 
+    yum install -y redhat-rpm-config \
+    make automake autoconf gcc gcc-c++ libstdc++ libstdc++-devel \
+    java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-headless.x86_64 java-1.8.0-openjdk-devel.x86_64 \
+    wget nano curl git gzip gettext tar xorg-x11-server-Xvfb xterm vnc-server \
+    net-tools python27-python-pip firefox nss_wrapper  && \
+    yum -y clean all
+
+RUN wget https://pypi.python.org/packages/source/s/setuptools/setuptools-7.0.tar.gz --no-check-certificate && \
+    tar xzf setuptools-7.0.tar.gz && \
+    cd setuptools-7.0 && \
+    python setup.py install && \
+    wget https://bootstrap.pypa.io/get-pip.py && \
+    python get-pip.py && \
+    pip install --upgrade pip && \
+    pip install zapcli && \
+    pip install python-owasp-zap-v2.4
+
+COPY contrib/zap/rpms/*.rpm ./
+
+RUN yum -y localinstall xmlstarlet-1.6.1-1.el7.x86_64.rpm && \
+    yum -y localinstall imlib2-1.4.5-9.el7.x86_64.rpm && \
+    yum -y localinstall pyxdg-0.25-2.el7.nux.noarch.rpm && \
+    yum -y localinstall openbox-libs-3.5.2-6.2.x86_64.rpm && \
+    yum -y localinstall openbox-3.5.2-6.2.x86_64.rpm && \
+    yum -y localinstall x11vnc-0.9.13-11.el7.x86_64.rpm && \
+    yum -y clean all && \
+    rm ./*.rpm && \
+    if [ ! -d /tmp/.X11-unix ] ; then mkdir /tmp/.X11-unix; fi && \
+    mkdir -p /zap/wrk && \
+    mkdir /zap@tmp && \
+    mkdir -p /var/lib/jenkins/.vnc
+
+ADD contrib/zap/zap /zap/
+
+# Copy the entrypoint
+COPY contrib/zap/configuration/* /var/lib/jenkins/
+
+# Default port for use with zapcli
+
+COPY contrib/zap/policies /var/lib/jenkins/.ZAP/policies/
+COPY contrib/zap/.xinitrc /var/lib/jenkins/
+ADD contrib/zap/webswing.config /zap/webswing-2.3/webswing.config
+
+WORKDIR /zap
+# Download and expand the latest stable release 
+RUN curl -s https://raw.githubusercontent.com/zaproxy/zap-admin/master/ZapVersions-dev.xml | xmlstarlet sel -t -v //url |grep -i Linux | wget -q --content-disposition -i - -O - | tar zx --strip-components=1 && \
+    curl -s -L https://bitbucket.org/meszarv/webswing/downloads/webswing-2.3-distribution.zip | jar -x && \
+    touch AcceptedLicense && \
+    chown -v -R root:root /zap && \
+    chown -v -R root:root /var/lib/jenkins && \
+    chmod -v -R 777 /var/lib/jenkins && \
+    chmod -v -R 777 /zap && \
+    chmod -v -R 777 /zap@tmp && \
+    chmod -v -R 1777 /tmp/.X11-unix && \
+    chown -v -R root:root /tmp/.X11-unix/
+
+WORKDIR /var/lib/jenkins
+
 USER 1001
