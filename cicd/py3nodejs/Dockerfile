@@ -23,8 +23,7 @@ ENV SUMMARY="Jenkins slave with python 3 and nodejs 6" \
     OPENSHIFT_JENKINS_JVM_ARCH=x86_64 \
     PATH=/zap:$PATH \
     ZAP_PATH=/zap/zap.sh \
-    ZAP_PORT=8080 \
-    HOME=/var/lib/jenkins
+    ZAP_PORT=8080
 
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
@@ -72,7 +71,7 @@ RUN yum repolist > /dev/null && \
     chmod -R og+rwx /opt/app-root && \ 
     yum install -y redhat-rpm-config \
     make automake autoconf gcc gcc-c++ libstdc++ libstdc++-devel \
-    java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-headless.x86_64 java-1.8.0-openjdk-devel.x86_64 \
+    #java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-headless.x86_64 java-1.8.0-openjdk-devel.x86_64 \
     wget nano curl git gzip gettext tar xorg-x11-server-Xvfb xterm vnc-server \
     net-tools python27-python-pip firefox nss_wrapper  && \
     yum -y clean all
@@ -88,7 +87,6 @@ RUN wget https://pypi.python.org/packages/source/s/setuptools/setuptools-7.0.tar
     pip install python-owasp-zap-v2.4
 
 COPY contrib/zap/rpms/*.rpm ./
-
 RUN yum -y localinstall xmlstarlet-1.6.1-1.el7.x86_64.rpm && \
     yum -y localinstall imlib2-1.4.5-9.el7.x86_64.rpm && \
     yum -y localinstall pyxdg-0.25-2.el7.nux.noarch.rpm && \
@@ -103,12 +101,7 @@ RUN yum -y localinstall xmlstarlet-1.6.1-1.el7.x86_64.rpm && \
     mkdir -p /var/lib/jenkins/.vnc
 
 ADD contrib/zap/zap /zap/
-
-# Copy the entrypoint
 COPY contrib/zap/configuration/* /var/lib/jenkins/
-
-# Default port for use with zapcli
-
 COPY contrib/zap/policies /var/lib/jenkins/.ZAP/policies/
 COPY contrib/zap/.xinitrc /var/lib/jenkins/
 ADD contrib/zap/webswing.config /zap/webswing-2.3/webswing.config
