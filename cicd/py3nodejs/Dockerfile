@@ -54,19 +54,37 @@ RUN yum repolist > /dev/null && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     yum-config-manager --enable rhel-7-server-extras-rpms && \
     yum-config-manager --enable rhel-7-server-fastrack-rpms && \
-    INSTALL_PKGS="redhat-rpm-config make automake autoconf gcc gcc-c++ libstdc++ libstdc++-devel \
-        wget nano curl gzip gettext tar nss_wrapper firefox \
-        java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-headless.x86_64 java-1.8.0-openjdk-devel.x86_64 \
-        rh-python35 rh-python35-python-devel rh-python35-python-setuptools rh-python35-python-pip \
-	nss_wrapper httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap httpd24-mod_session \
-        atlas-devel gcc-gfortran libffi-devel libtool-ltdl rh-nodejs6 rh-nodejs6-nodejs-nodemon" && \
-    ln -s /usr/lib/node_modules/nodemon/bin/nodemon.js /usr/bin/nodemon && \
+    ln -s /usr/lib/node_modules/nodemon/bin/nodemon.js /usr/bin/nodemon
+
+RUN INSTALL_PKGS="redhat-rpm-config make automake autoconf gcc gcc-c++ libstdc++ libstdc++-devel" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
-    # Remove redhat-logos (httpd dependency) to keep image size smaller.
-    rpm -e --nodeps redhat-logos && \
-    yum clean all -y && \
-    source scl_source enable rh-nodejs6 && \
+    rpm -V $INSTALL_PKGS
+        
+RUN INSTALL_PKGS="wget nano curl gzip gettext tar nss_wrapper firefox" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS
+
+RUN INSTALL_PKGS="java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-headless.x86_64 java-1.8.0-openjdk-devel.x86_64" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS
+
+RUN INSTALL_PKGS="rh-python35 rh-python35-python-devel rh-python35-python-setuptools rh-python35-python-pip" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS
+
+RUN INSTALL_PKGS="nss_wrapper httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap httpd24-mod_session" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS
+
+RUN INSTALL_PKGS="atlas-devel gcc-gfortran libffi-devel libtool-ltdl rh-nodejs6 rh-nodejs6-nodejs-nodemon" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS
+
+# Remove redhat-logos (httpd dependency) to keep image size smaller.
+RUN rpm -e --nodeps redhat-logos && \
+    yum clean all -y
+
+RUN source scl_source enable rh-nodejs6 && \
     npm i -g yarn@latest && \
     npm i -g nsp@latest && \
     rm -rf ~/.npm && \
