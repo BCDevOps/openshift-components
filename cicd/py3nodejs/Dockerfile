@@ -64,7 +64,15 @@ RUN INSTALL_PKGS="wget nano curl gzip gettext tar nss_wrapper firefox" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS
 
-RUN INSTALL_PKGS="java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-headless.x86_64 java-1.8.0-openjdk-devel.x86_64" && \
+RUN INSTALL_PKGS="java-1.8.0-openjdk.x86_64" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS
+
+RUN INSTALL_PKGS="java-1.8.0-openjdk-headless.x86_64" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS
+
+RUN INSTALL_PKGS="java-1.8.0-openjdk-devel.x86_64" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS
 
