@@ -4,8 +4,8 @@ FROM registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7
 
 EXPOSE 8080
 
-ENV SUMMARY="Jenkins slave with python 3 and nodejs 6" \
-    DESCRIPTION="Jenkins pipeline slave with python 3 and nodejs 6 installed" \
+ENV SUMMARY="Jenkins slave with python 3, nodejs 6, owasp zap, sonar-ruuner" \
+    DESCRIPTION="Jenkins pipeline slave with python 3, nodejs 6, owasp zap  installed" \
     PYTHON_VERSION=3.5 \
     PATH=$HOME/.local/bin/:$PATH \
     PYTHONUNBUFFERED=1 \
@@ -19,16 +19,12 @@ ENV SUMMARY="Jenkins slave with python 3 and nodejs 6" \
     PATH=/opt/rh/rh-nodejs6/root/usr/bin${PATH:+:${PATH}} \
     LD_LIBRARY_PATH=/opt/rh/rh-nodejs6/root/usr/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}} \
     PYTHONPATH=/opt/rh/rh-nodejs6/root/usr/lib/python2.7/site-packages${PYTHONPATH:+:${PYTHONPATH}} \
-    MANPATH=/opt/rh/rh-nodejs6/root/usr/share/man:$MANPATH \
-    OPENSHIFT_JENKINS_JVM_ARCH=x86_64 \
-    PATH=/zap:$PATH \
-    ZAP_PATH=/zap/zap.sh \
-    ZAP_PORT=8080
+    MANPATH=/opt/rh/rh-nodejs6/root/usr/share/man:$MANPATH
 
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Jenkins-Pipeline-python-nodejs" \
+      io.k8s.display-name="Jenkins-Pipeline-python-nodejs-test" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,jenkins-jnlp-python,jenkins-jnlp-nodejs,jenkins-jnlp" \
       release="1"
@@ -47,13 +43,21 @@ COPY contrib/bin/scl_enable /usr/local/bin/scl_enable
 # writable as OpenShift default security model is to run the container under
 # random UID.
 
+RUN UNINSTALL_PKGS="java-1.8.0-openjdk-headless.i686 libstdc++-4.8.5-16.el7.i686" &&\
+    yum remove -y $UNINSTALL_PKGS
+
 RUN yum repolist > /dev/null && \
     yum install -y yum-utils && \
     yum-config-manager --disable \* &> /dev/null && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
-    INSTALL_PKGS="rh-python35 rh-python35-python-devel rh-python35-python-setuptools rh-python35-python-pip \
+    yum-config-manager --enable rhel-7-server-extras-rpms && \
+    yum-config-manager --enable rhel-7-server-fastrack-rpms && \
+    INSTALL_PKGS="redhat-rpm-config make automake autoconf gcc gcc-c++ libstdc++ libstdc++-devel \
+        wget nano curl gzip gettext tar nss_wrapper firefox \
+        java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-headless.x86_64 java-1.8.0-openjdk-devel.x86_64 \
+        rh-python35 rh-python35-python-devel rh-python35-python-setuptools rh-python35-python-pip \
 	nss_wrapper httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap httpd24-mod_session \
         atlas-devel gcc-gfortran libffi-devel libtool-ltdl rh-nodejs6 rh-nodejs6-nodejs-nodemon" && \
     ln -s /usr/lib/node_modules/nodemon/bin/nodemon.js /usr/bin/nodemon && \
@@ -68,25 +72,21 @@ RUN yum repolist > /dev/null && \
     rm -rf ~/.npm && \
     mkdir -p /opt/app-root  && \
     chown -R 1001:0 /opt/app-root && \
-    chmod -R og+rwx /opt/app-root && \ 
-    yum install -y redhat-rpm-config \
-    make automake autoconf gcc gcc-c++ libstdc++ libstdc++-devel \
-    java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-headless.x86_64 java-1.8.0-openjdk-devel.x86_64 \
-    wget nano curl git gzip gettext tar xorg-x11-server-Xvfb xterm vnc-server \
-    net-tools python27-python-pip firefox nss_wrapper  && \
-    yum -y clean all
+    chmod -R og+rwx /opt/app-root 
 
 RUN wget https://pypi.python.org/packages/source/s/setuptools/setuptools-7.0.tar.gz --no-check-certificate && \
     tar xzf setuptools-7.0.tar.gz && \
     cd setuptools-7.0 && \
     python setup.py install && \
     wget https://bootstrap.pypa.io/get-pip.py && \
-    python get-pip.py && \
-    pip install --upgrade pip && \
+    python get-pip.py
+
+RUN pip install --upgrade pip && \
     pip install zapcli && \
     pip install python-owasp-zap-v2.4
 
 COPY contrib/zap/rpms/*.rpm ./
+
 RUN yum -y localinstall xmlstarlet-1.6.1-1.el7.x86_64.rpm && \
     yum -y localinstall imlib2-1.4.5-9.el7.x86_64.rpm && \
     yum -y localinstall pyxdg-0.25-2.el7.nux.noarch.rpm && \
@@ -101,17 +101,26 @@ RUN yum -y localinstall xmlstarlet-1.6.1-1.el7.x86_64.rpm && \
     mkdir -p /var/lib/jenkins/.vnc
 
 ADD contrib/zap/zap /zap/
+
+# Copy the entrypoint
 COPY contrib/zap/configuration/* /var/lib/jenkins/
+
+ENV PATH /zap:$PATH
+ENV ZAP_PATH /zap/zap.sh
+ENV ZAP_PORT 8080
+
 COPY contrib/zap/policies /var/lib/jenkins/.ZAP/policies/
 COPY contrib/zap/.xinitrc /var/lib/jenkins/
-ADD contrib/zap/webswing.config /zap/webswing-2.3/webswing.config
 
 WORKDIR /zap
 # Download and expand the latest stable release 
 RUN curl -s https://raw.githubusercontent.com/zaproxy/zap-admin/master/ZapVersions-dev.xml | xmlstarlet sel -t -v //url |grep -i Linux | wget -q --content-disposition -i - -O - | tar zx --strip-components=1 && \
     curl -s -L https://bitbucket.org/meszarv/webswing/downloads/webswing-2.3-distribution.zip | jar -x && \
-    touch AcceptedLicense && \
-    chown -v -R root:root /zap && \
+    touch AcceptedLicense
+    
+ADD contrib/zap/webswing.config /zap/webswing-2.3/webswing.config
+
+RUN chown -v -R root:root /zap && \
     chown -v -R root:root /var/lib/jenkins && \
     chmod -v -R 777 /var/lib/jenkins && \
     chmod -v -R 777 /zap && \
@@ -119,6 +128,10 @@ RUN curl -s https://raw.githubusercontent.com/zaproxy/zap-admin/master/ZapVersio
     chmod -v -R 1777 /tmp/.X11-unix && \
     chown -v -R root:root /tmp/.X11-unix/
 
+    
+ENV HOME /var/lib/jenkins
 WORKDIR /var/lib/jenkins
+
+ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
 
 USER 1001
