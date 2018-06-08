@@ -43,7 +43,7 @@ COPY contrib/bin/scl_enable /usr/local/bin/scl_enable
 # writable as OpenShift default security model is to run the container under
 # random UID.
 
-RUN UNINSTALL_PKGS="java-1.8.0-openjdk-headless.i686 libstdc++-4.8.5-16.el7.i686" &&\
+RUN UNINSTALL_PKGS="java-1.8.0-openjdk-headless.i686 libstdc++-4.8.5-16.el7.i686 libstdc++-4.8.5-16.el7_4.1.i686" &&\
     yum remove -y $UNINSTALL_PKGS
 
 RUN yum repolist > /dev/null && \
