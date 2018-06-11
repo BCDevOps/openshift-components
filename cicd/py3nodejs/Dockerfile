@@ -127,6 +127,7 @@ RUN yum -y localinstall xmlstarlet-1.6.1-1.el7.x86_64.rpm && \
     mkdir -p /var/lib/jenkins/.vnc
 
 ADD contrib/zap/zap /zap/
+ADD contrib/sonar /sonar-runner/
 
 # Copy the entrypoint
 COPY contrib/zap/configuration/* /var/lib/jenkins/
