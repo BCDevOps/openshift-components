@@ -80,7 +80,7 @@ def github_login_func(request):
         logger.debug("Primary email is {}".format(primary_email))
 
         user = github_register(username=username,
-                               email=primary_email,
+                               email=primary_email.lower(),
                                full_name=user_info.full_name,
                                github_id=user_info.id,
                                bio=user_info.bio,
