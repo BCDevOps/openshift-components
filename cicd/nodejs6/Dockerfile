@@ -1,8 +1,8 @@
 FROM registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7
 
 ARG NODE_MAJOR_VERSION=6
-ARG NODE_VERSION=node-v6.14.2
-ARG NODE_LOCATION=latest-v6.x
+ARG NODE_VERSION=node-v6.14.3
+ARG NODE_LOCATION=v6.14.3
 
 ENV SUMMARY="Jenkins slave with stock nodejs ${NODE_VERSION}"  \
     DESCRIPTION="Jenkins pipeline slave with stock nodejs ${NODE_VERSION}"
