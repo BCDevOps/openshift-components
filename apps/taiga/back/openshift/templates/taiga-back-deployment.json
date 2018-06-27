@@ -39,8 +39,8 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-                "namespace": "${IMAGE_NAMESPACE}",
-                "name": "${IMAGE_NAME}:${IMAGE_TAG}"
+                "namespace": "${IMAGESTREAM_NAMESPACE}",
+                "name": "${IMAGESTREAM_NAME}:${IMAGESTREAM_TAG}"
               }
             }
           },
@@ -163,6 +163,14 @@
                   {
                     "name": "TAIGA_FRONT_DOMAIN",
                     "value": "${TAIGA_FRONT_DOMAIN}"
+                  },
+                  {
+                    "name": "TAIGA_GITHUB_AUTH_ENABLED",
+                    "value": "${TAIGA_GITHUB_AUTH_ENABLED}"
+                  },
+                  {
+                    "name": "TAIGA_GITHUB_EXTENDED_AUTH_ORG",
+                    "value": "${TAIGA_GITHUB_EXTENDED_AUTH_ORG}"
                   },
                   {
                     "name": "DJANGO_SETTINGS_MODULE",
@@ -304,17 +312,17 @@
       "value": "taiga-back"
     },
     {
-      "name": "IMAGE_NAME",
+      "name": "IMAGESTREAM_NAME",
       "required": true,
       "value": "taiga-back"
     },
     {
-      "name": "IMAGE_NAMESPACE",
+      "name": "IMAGESTREAM_NAMESPACE",
       "required": true,
-      "value": "devops-platform-support-tools"
+      "value": "openshift"
     },
     {
-      "name": "IMAGE_TAG",
+      "name": "IMAGESTREAM_TAG",
       "required": true,
       "value": "latest"
     },
@@ -368,6 +376,12 @@
       "name": "TAIGA_GITHUB_EXTENDED_AUTH_ORG",
       "description": "GitHub organization that user must be a member of in order to register.",
       "required": true
+    },
+    {
+      "name": "TAIGA_GITHUB_AUTH_ENABLED",
+      "description": "Whether or not extended GitHub authentication is enabled.",
+      "required": true,
+      "value": "True"
     },
     {
       "name": "TAIGA_FRONT_SCHEME",

@@ -174,7 +174,7 @@
     },
     {
       "name": "IMAGESTREAM_NAMESPACE",
-      "value": "devops-platform-support-tools"
+      "value": "openshift"
     },
     {
       "name": "IMAGESTREAM_TAG",
