@@ -14,6 +14,9 @@ The Taiga configuration in this repo utilizes GitHub registration and authentica
 
 * Users attempting to register and subsequently login *must* be ***public*** members of the configured GitHub organization.  This is not the default membership, so users will need to change this in order to be able to register or login to Taiga.
 * For the project invitation feature, the email of the invitee must match ***exactly*** the email address associated with their GitHub ID
+
+One more "thing to know" related to security:
+
 * The file attachments feature generates cryptic/hard to guess links for attachments, but it ***does not restrict access to attachments***.  For example if a file is attached to an issue in a private Taiga project, a cryptic link would be generated for the attachment but would technically be accessible to anyone who had or could infer the link.  This is a common approach in some Dropbox-like tools but teams should satisfy themselves that this is appropriate/sufficient for the sensitivity of material they are storing in Taiga.  
 
 ### What is in this repo?
