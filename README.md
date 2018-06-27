@@ -2,11 +2,21 @@
 
 # OpenShift Components
 
-Useful components for day to day operations on OpenShift. 
+A trove of apps/components/stuff/things that are usable by anyone running OpenShift  - in particular BC Gov teams "doing" Agile/DevOps.
+
+For the most part (maybe 100%...), this repo contains the OpenShift build and/or deployment templates for building and/or running things in OpenShift - it does not contain the "things" themselves.
+
+This is heavily under development and documentation may be scant. You've been warned.
+
+In its current form, this repo is a central place for the DevOps team to collect artifcats for the shared things it is providing, but also about "discovery" by teams of shared things that are available so fewer wheels are reinvented within BC Gov.  
 
 ## apps
 
-Templates for build / deployment and useful support applications    
+This folder contains artifacts for useful team "support applications". These are things that team would generally install and use, rather than using as the basis of custom development. 
+
+__Taiga__
+
+Taiga is a user-friendly Agile project management and collaboration tool with functionality somewhere between Trello and Jira. The assets provided [here](apps/taiga) enable a team to deploy their own Taiga instance within an OpenShift project space. 
 
 ## cicd
 
