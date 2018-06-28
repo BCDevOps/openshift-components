@@ -35,7 +35,7 @@
               "automatic": true,
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "taiga-back-upstream:${GIT_UPSTREAM_REF}"
+                "name": "taiga-back-upstream:${OUTPUT_IMAGESTREAM_TAG}"
               }
             }
           },
@@ -55,7 +55,7 @@
             {
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "taiga-back-upstream:${GIT_UPSTREAM_REF}"
+                "name": "taiga-back-upstream:${OUTPUT_IMAGESTREAM_TAG}"
               },
               "paths": [
                 {
@@ -85,7 +85,7 @@
         "output": {
           "to": {
             "kind": "ImageStreamTag",
-            "name": "${NAME}:${GIT_UPSTREAM_REF}"
+            "name": "${NAME}:${OUTPUT_IMAGESTREAM_TAG}"
           }
         },
         "resources": {
@@ -153,7 +153,7 @@
         "output": {
           "to": {
             "kind": "ImageStreamTag",
-            "name": "taiga-back-upstream:${GIT_UPSTREAM_REF}"
+            "name": "taiga-back-upstream:${OUTPUT_IMAGESTREAM_TAG}"
           }
         },
         "resources": {
@@ -225,6 +225,11 @@
       "name": "GIT_UPSTREAM_REF",
       "required": true,
       "value": "3.3.8"
+    },
+    {
+      "name": "OUTPUT_IMAGESTREAM_TAG",
+      "required": true,
+      "value": "latest"
     }
 
   ]

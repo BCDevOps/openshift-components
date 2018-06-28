@@ -57,7 +57,7 @@
         "output": {
           "to": {
             "kind": "ImageStreamTag",
-            "name": "taiga-front:${GIT_UPSTREAM_REF}"
+            "name": "taiga-front:${OUTPUT_IMAGESTREAM_TAG}"
           }
         },
         "resources": {
@@ -88,7 +88,7 @@
               "automatic": true,
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "taiga-front:${GIT_UPSTREAM_REF}"
+                "name": "taiga-front:${OUTPUT_IMAGESTREAM_TAG}"
               }
             }
           }
@@ -105,7 +105,7 @@
             {
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "taiga-back:${GIT_UPSTREAM_REF}"
+                "name": "taiga-back:${OUTPUT_IMAGESTREAM_TAG}"
               },
               "paths": [
                 {
@@ -117,7 +117,7 @@
             {
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "taiga-front:${GIT_UPSTREAM_REF}"
+                "name": "taiga-front:${OUTPUT_IMAGESTREAM_TAG}"
               },
               "paths": [
                 {
@@ -147,7 +147,7 @@
         "output": {
           "to": {
             "kind": "ImageStreamTag",
-            "name": "taiga-front-runtime:${GIT_UPSTREAM_REF}",
+            "name": "taiga-front-runtime:${OUTPUT_IMAGESTREAM_TAG}",
             "namespace": "${RUNTIME_OUTPUT_NAMESPACE}"
           }
         },
@@ -214,6 +214,11 @@
       "name": "GIT_RUNTIME_REF",
       "required": true,
       "value": "master"
+    },
+    {
+      "name": "OUTPUT_IMAGESTREAM_TAG",
+      "required": true,
+      "value": "latest"
     },
     {
       "name": "GIT_RUNTIME_NODEJS_CONTEXT_DIR",
