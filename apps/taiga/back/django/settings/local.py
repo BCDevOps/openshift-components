@@ -53,3 +53,9 @@ EMAIL_HOST = os.environ.get('TAIGA_EMAIL_HOST','')
 EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
 EMAIL_PORT = 25
+
+IMPORTERS["github"] = {
+   "active": True, # Enable or disable the importer
+   "client_id": os.environ.get('GITHUB_API_CLIENT_ID', ''),
+   "client_secret": os.environ.get('GITHUB_API_CLIENT_SECRET', '')
+}
