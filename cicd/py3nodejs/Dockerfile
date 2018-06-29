@@ -4,7 +4,7 @@ FROM registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7
 
 EXPOSE 8080
 
-ENV SUMMARY="Jenkins slave with python 3, nodejs 6, owasp zap, sonar-runner" \
+ENV SUMMARY="Jenkins slave with python 3, nodejs 6, owasp zap, sonar-ruuner" \
     DESCRIPTION="Jenkins pipeline slave with python 3, nodejs 6, owasp zap  installed" \
     PYTHON_VERSION=3.5 \
     PATH=$HOME/.local/bin/:$PATH \
@@ -54,45 +54,44 @@ RUN yum repolist > /dev/null && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     yum-config-manager --enable rhel-7-server-extras-rpms && \
     yum-config-manager --enable rhel-7-server-fastrack-rpms && \
-    ln -s /usr/lib/node_modules/nodemon/bin/nodemon.js /usr/bin/nodemon && \
-    INSTALL_PKGS="redhat-rpm-config make automake autoconf gcc gcc-c++ libstdc++ libstdc++-devel" && \
+    ln -s /usr/lib/node_modules/nodemon/bin/nodemon.js /usr/bin/nodemon
+
+RUN INSTALL_PKGS="redhat-rpm-config make automake autoconf gcc gcc-c++ libstdc++ libstdc++-devel wget nano curl gzip gettext tar nss_wrapper firefox" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
-    INSTALL_PKGS="wget nano curl gzip gettext tar nss_wrapper firefox" && \
+    rpm -V $INSTALL_PKGS
+        
+RUN INSTALL_PKGS="java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-devel.x86_64" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
-    INSTALL_PKGS="java-1.8.0-openjdk.x86_64" && \
+    rpm -V $INSTALL_PKGS
+
+#RUN INSTALL_PKGS="java-1.8.0-openjdk-headless.x86_64" && \
+#   yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+#   rpm -V $INSTALL_PKGS
+
+RUN INSTALL_PKGS="rh-python35 rh-python35-python-devel rh-python35-python-setuptools rh-python35-python-pip nss_wrapper httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl rh-nodejs6 rh-nodejs6-nodejs-nodemon" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
-    INSTALL_PKGS="java-1.8.0-openjdk-devel.x86_64" && \
-    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
-    INSTALL_PKGS="rh-python35 rh-python35-python-devel rh-python35-python-setuptools rh-python35-python-pip" && \
-    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
-    INSTALL_PKGS="nss_wrapper httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap httpd24-mod_session" && \
-    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKG && \
-    INSTALL_PKGS="atlas-devel gcc-gfortran libffi-devel libtool-ltdl rh-nodejs6 rh-nodejs6-nodejs-nodemon" && \
-    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS
+
 # Remove redhat-logos (httpd dependency) to keep image size smaller.
-    rpm -e --nodeps redhat-logos && \
-    yum clean all -y && \
-    source scl_source enable rh-nodejs6 && \
+RUN rpm -e --nodeps redhat-logos && \
+    yum clean all -y
+
+RUN source scl_source enable rh-nodejs6 && \
     npm i -g yarn@latest && \
     npm i -g nsp@latest && \
     rm -rf ~/.npm && \
     mkdir -p /opt/app-root  && \
     chown -R 1001:0 /opt/app-root && \
-    chmod -R og+rwx /opt/app-root && \
-    wget https://pypi.python.org/packages/source/s/setuptools/setuptools-7.0.tar.gz --no-check-certificate && \
+    chmod -R og+rwx /opt/app-root 
+
+RUN wget https://pypi.python.org/packages/source/s/setuptools/setuptools-7.0.tar.gz --no-check-certificate && \
     tar xzf setuptools-7.0.tar.gz && \
     cd setuptools-7.0 && \
     python setup.py install && \
     wget https://bootstrap.pypa.io/get-pip.py && \
-    python get-pip.py && \
-    pip install --upgrade pip && \
+    python get-pip.py
+
+RUN pip install --upgrade pip && \
     pip install zapcli && \
     pip install python-owasp-zap-v2.4
 
@@ -139,6 +138,7 @@ RUN chown -v -R root:root /zap && \
     chmod -v -R 777 /zap@tmp && \
     chmod -v -R 1777 /tmp/.X11-unix && \
     chown -v -R root:root /tmp/.X11-unix/
+
     
 ENV HOME /var/lib/jenkins
 WORKDIR /var/lib/jenkins
