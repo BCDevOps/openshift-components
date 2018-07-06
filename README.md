@@ -67,7 +67,7 @@ oc process -f build.json \
 -p NAME=jenkins-slave-node \
 -p OUTPUT_IMAGE_TAG=6 \
 -p GIT_REPO_URL=https://github.com/BCDevOps/openshift-components.git \
--p SOURCE_CONTEXT_DIR=cicd/node6 | oc create -f -
+-p SOURCE_CONTEXT_DIR=cicd/nodejs6 | oc create -f -
 ```
 
 | Parameter          | Optional      | Description   |
