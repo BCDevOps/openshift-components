@@ -109,8 +109,7 @@
         "name": "OUTPUT_IMAGE_TAG",
         "displayName": "Output Image Tag",
         "description": "The tag given to the built image.",
-        "required": true,
-        "value": "latest"
+        "required": true
       },
       {
         "name": "DOCKER_FILE_PATH",
