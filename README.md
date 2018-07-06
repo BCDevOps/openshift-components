@@ -29,7 +29,7 @@ __Python 3 & node.js 6.11__
 
 This image contains Python 3 (with `pip`) and RedHat node.js 6.11 (with `npm`).
 
-__node.js 6.11__
+__node.js 6.11__ && __node.js 8.11__
 
 This image contains __stock__ node.js 6.11 with the
 latest `npm` (>= 6.0.0), `yarn`, and `nsp` cli tools installed
