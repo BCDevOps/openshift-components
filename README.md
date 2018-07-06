@@ -64,7 +64,8 @@ with the following command (make sure you're in tools ;) ):
 
 ```console
 oc process -f build.json \
--p NAME=jenkins-slave-node6 \
+-p NAME=jenkins-slave-node \
+-p OUTPUT_IMAGE_TAG=6 \
 -p GIT_REPO_URL=https://github.com/BCDevOps/openshift-components.git \
 -p SOURCE_CONTEXT_DIR=cicd/node6 | oc replace -f -
 ```
