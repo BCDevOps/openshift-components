@@ -4,6 +4,8 @@ ARG NODE_MAJOR_VERSION=8
 ARG NODE_VERSION=node-v8.11.3
 ARG NODE_LOCATION=v8.11.3
 
+ENV FOO="Bar"
+
 ENV SUMMARY="Jenkins slave with stock nodejs ${NODE_VERSION}"  \
     DESCRIPTION="Jenkins pipeline slave with stock nodejs ${NODE_VERSION}"
 
