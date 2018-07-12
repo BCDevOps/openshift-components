@@ -1,8 +1,7 @@
 FROM registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7
 
 ARG NODE_MAJOR_VERSION=8
-ARG NODE_VERSION=node-v8.11.3
-ARG NODE_LOCATION=v8.11.3
+ARG NODE_VERSION=v8.11.3
 
 ENV SUMMARY="Jenkins slave with stock nodejs ${NODE_VERSION}"  \
     DESCRIPTION="Jenkins pipeline slave with stock nodejs ${NODE_VERSION}"
@@ -39,12 +38,12 @@ RUN yum repolist > /dev/null && \
 # Fetch stock nodejs and install
 RUN mkdir -p /opt && \
     pushd /opt && \
-    curl -s https://nodejs.org/dist/${NODE_LOCATION}/${NODE_VERSION}-linux-x64.tar.xz | tar -Jx && \
-    rm -f ${NODE_VERSION}-linux-x64.tar.xz
+    curl -s https://nodejs.org/dist/latest-v${NODE_MAJOR_VERSION}.x/node-${NODE_VERSION}-linux-x64.tar.xz | tar -Jx && \
+    rm -f node-${NODE_VERSION}-linux-x64.tar.xz
 
 # Update environment variables
-ENV NODE_HOME=/opt/${NODE_VERSION}-linux-x64 \
-    PATH=$PATH:/opt/${NODE_VERSION}-linux-x64/bin
+ENV NODE_HOME=/opt/node-${NODE_VERSION}-linux-x64 \
+    PATH=$PATH:/opt/node-${NODE_VERSION}-linux-x64/bin
 
 # Update the version of `npm` that came with the packages above
 # and install a few additional tools.
