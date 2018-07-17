@@ -32,6 +32,9 @@ println "Jenkins ConfigMap:"
 println "${jenkinsConfig}"
 
 
+String jenkinsRouteHost = ['sh', '-c', 'oc get route/jenkins --template={{.spec.host}}'].execute().text.trim()
+JenkinsLocationConfiguration.get().setUrl("https://${jenkinsRouteHost}/")
+
 /* TODO:
 - Create Jenkins Credetential "Secret Text" with id "github-access-token"
 - Create Jenkins Credential "Username and Password" with id "github-account" where password is the same as "github-access-token"
@@ -154,6 +157,3 @@ def sa = org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval.get();
   sa.approveSignature(it);
 }
 
-
-String jenkinsRouteHost = ['sh', '-c', 'oc get route/jenkins --template={{.spec.host}}'].execute().text.trim()
-JenkinsLocationConfiguration.get().setUrl("https://${jenkinsRouteHost}/")
