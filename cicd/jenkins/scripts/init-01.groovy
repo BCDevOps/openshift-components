@@ -89,7 +89,7 @@ deployerCredentials.data.each { key, value ->
 */
 
 println "Configuring GitHub API"
-Jenkins.getInstance().getDescriptor(org.jenkinsci.plugins.github.config.GitHubPluginConfig.class)
+
 def ghCofigs = Jenkins.getInstance().getDescriptor(org.jenkinsci.plugins.github.config.GitHubPluginConfig.class).getConfigs();
 def ghServerConfig = new org.jenkinsci.plugins.github.config.GitHubServerConfig('github-access-token');
 ghServerConfig.setName('GitHub')
@@ -138,6 +138,9 @@ if (jenkinsConfig.projects) {
   }
   Jenkins.getInstance().save()
 }
+
+def registeredGHWebHooks = GitHubWebHook.get().reRegisterAllHooks();
+println "Called registerHooks() for ${registeredGHWebHooks.size()} items"
 
 def sa = org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval.get();
 [
