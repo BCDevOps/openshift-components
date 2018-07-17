@@ -23,8 +23,8 @@ println "Initializing from remote script"
 String jenkinsConfigText = runOrDie(['oc', 'get', 'configmaps/jenkins', '--template={{.data.config}}'], "'ConfigMaps/jenkins' was NOT found")
 def jenkinsConfig = new groovy.json.JsonSlurper().parseText(jenkinsConfigText?:'{}')
 
-String githubUsername=runOrDie(['sh', '-c', "oc get secret/${jenkinsConfig.'github-account.secret.name'} --template={{.data.username}} | base64 --decode"], "'secret/github-credentials' was NOT nound")
-String githubPassword=runOrDie(['sh', '-c', "oc get secret/${jenkinsConfig.'github-account.secret.name'} --template={{.data.password}} | base64 --decode"], "'secret/github-credentials' was NOT nound")
+String githubUsername=runOrDie(['sh', '-c', "oc get secret/${jenkinsConfig.'github-account.secret.name'} --template={{.data.username}} | base64 --decode"], "'secret/${jenkinsConfig.'github-account.secret.name'}' was NOT nound")
+String githubPassword=runOrDie(['sh', '-c', "oc get secret/${jenkinsConfig.'github-account.secret.name'} --template={{.data.password}} | base64 --decode"], "'secret/${jenkinsConfig.'github-account.secret.name'}' was NOT nound")
 
 
 println "Jenkins ConfigMap:"
