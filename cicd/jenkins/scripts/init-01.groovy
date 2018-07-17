@@ -9,6 +9,7 @@ import java.net.URL;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import com.openshift.jenkins.plugins.OpenShiftTokenCredentials;
+import com.cloudbees.jenkins.GitHubWebHook;
 
 
 def runOrDie(command, String errorMessage){
