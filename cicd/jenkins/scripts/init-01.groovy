@@ -10,7 +10,8 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import com.openshift.jenkins.plugins.OpenShiftTokenCredentials;
 import com.cloudbees.jenkins.GitHubWebHook;
-
+import hudson.tools.*;
+import hudson.plugins.groovy.*;
 
 def runOrDie(command, String errorMessage){
   def process=command.execute()
@@ -124,6 +125,20 @@ if (jenkinsConfig.globalLibraries) {
   Jenkins.getInstance().save()
 }
 
+//Registering Tools
+if (jenkinsConfig?.tools?.groovy) {
+  def groovyDescriptor = Jenkins.getInstance().getDescriptor("hudson.plugins.groovy.GroovyInstallation")
+  def groovyInstallations = groovyDescriptor.getInstallations()
+  //https://github.com/Accenture/adop-jenkins/blob/master/resources/init.groovy.d/adop_groovy.groovy
+  for (Map groovyTool: jenkinsConfig.tools?.groovy) {
+    def installer = new GroovyInstaller(groovyTool.version)
+    def installSourceProperty = new InstallSourceProperty([installer])
+    def installation = new GroovyInstallation(groovyTool.name,"", [installSourceProperty])
+    groovyInstallations += installation
+  }
+  groovyDescriptor.setInstallations((GroovyInstallation[]) groovyInstallations)
+  Jenkins.getInstance().save()
+}
 
 
 if (jenkinsConfig.projects) {
