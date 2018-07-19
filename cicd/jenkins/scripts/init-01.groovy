@@ -131,6 +131,7 @@ if (jenkinsConfig?.tools?.groovy) {
   def groovyInstallations = groovyDescriptor.getInstallations()
   //https://github.com/Accenture/adop-jenkins/blob/master/resources/init.groovy.d/adop_groovy.groovy
   for (Map groovyTool: jenkinsConfig.tools?.groovy) {
+    println "Adding groovy '${groovyTool.version}' as '${groovyTool.name}'"
     def installer = new GroovyInstaller(groovyTool.version)
     def installSourceProperty = new InstallSourceProperty([installer])
     def installation = new GroovyInstallation(groovyTool.name,"", [installSourceProperty])
