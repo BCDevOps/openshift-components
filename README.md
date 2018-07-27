@@ -39,7 +39,7 @@ __Python 3 & node.js 6.11__
 
 This image contains Python 3 (with `pip`) and RedHat node.js 6.11 (with `npm`).
 
-__node.js 6.11__
+__node.js 6.11__ && __node.js 8.11__
 
 This image contains __stock__ node.js 6.11 with the
 latest `npm` (>= 6.0.0), `yarn`, and `nsp` cli tools installed
@@ -71,12 +71,12 @@ To build your own image, and add it to the registry, *but* keep it private to yo
 image stream(s) you can use the OpenShift `build.json` template in this repo
 with the following command (make sure you're in tools ;) ):
 
-
 ```console
 oc process -f build.json \
--p NAME=jenkins-slave-node6 \
+-p NAME=jenkins-slave-node \
+-p OUTPUT_IMAGE_TAG=6 \
 -p GIT_REPO_URL=https://github.com/BCDevOps/openshift-components.git \
--p SOURCE_CONTEXT_DIR=cicd/node6 | oc replace -f -
+-p SOURCE_CONTEXT_DIR=cicd/nodejs6 | oc create -f -
 ```
 
 | Parameter          | Optional      | Description   |
@@ -94,6 +94,19 @@ the image from your own image stream rather than OpenShift For example:
 
 | Image Stream       | Reference   |
 | ------------------ | ----------- |
-| OpenShift          | `172.50.0.2:5000/openshift/jenkins-slave-node6` |
-| Your Project       | `172.50.0.2:5000/mycool-project-tools/jenkins-slave-node6` |
+| OpenShift          | `172.50.0.2:5000/openshift/jenkins-slave-node` |
+| Your Project       | `172.50.0.2:5000/mycool-project-tools/jenkins-slave-node` |
 
+__Pro Tip__
+
+You can use the following command to find the latest version for a particular majour version:
+
+```console
+curl -s https://nodejs.org/dist/latest-v8.x/ | \
+sed -E 's/<[^>]*>//g' | \
+grep 'linux-x64.tar.xz' | \
+awk '{ print $1 }' | \
+awk -F\- '{ print $2 }'
+```
+
+Update the Docker files with this version (and create PR).
