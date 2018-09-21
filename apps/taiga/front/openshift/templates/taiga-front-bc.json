@@ -198,7 +198,7 @@
     {
       "name": "GIT_UPSTREAM_REF",
       "required": true,
-      "value": "3.3.8"
+      "value": "3.4.4"
     },
     {
       "name": "GIT_SCRIPTS_BASE_URL",
