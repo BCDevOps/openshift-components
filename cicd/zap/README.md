@@ -37,9 +37,13 @@ Common options for the baseline scan are:
     -s                short output format - dont show PASSes or example URLs
     -z zap_options    ZAP command line options e.g. -z "-config aaa=bbb -config ccc=ddd"
       
-### Running OWASP ZAP in the pipeline
+### Integrating OWASP ZAP Scanning and Reporting into your Project
 
-The simplest way of running ZAP in the pipeline is to include the following code in your pipeline Jenkinsfile:
+To make the results of your ZAP security vulnerability scanning more accessible you can integrate the scan results into a SonarQube project report.  Detailed documentation and examples can be found in the [SonarQube on OpenShift](https://github.com/BCDevOps/sonarqube) project, which leverages the `openshift/jenkins-slave-zap` image generated from this project's source.
+
+### Experiment with running OWASP ZAP in a pipeline
+
+The simplest way to experiment with running ZAP in a pipeline is to include the following code in your pipeline Jenkinsfile:
 
 ```
 podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
