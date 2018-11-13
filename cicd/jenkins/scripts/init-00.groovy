@@ -130,6 +130,10 @@ def signatures=new XmlSlurper().parseText('''
     <string>new javax.xml.transform.stream.StreamSource java.io.InputStream</string>
     <string>staticField java.nio.charset.StandardCharsets UTF_8</string>
     <string>staticMethod jenkins.model.Jenkins getInstance</string>
+    <string>method java.lang.String indexOf java.lang.String int</string>
+    <string>new java.io.PrintWriter java.io.Writer</string>
+    <string>method java.lang.Throwable printStackTrace java.io.PrintWriter</string>
+    <string>method org.kohsuke.github.GHIssue comment java.lang.String</string>
 </signature>''');
 
 signatures.string.each {

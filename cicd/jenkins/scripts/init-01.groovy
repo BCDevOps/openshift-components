@@ -9,7 +9,9 @@ import java.net.URL;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import com.openshift.jenkins.plugins.OpenShiftTokenCredentials;
-
+import com.cloudbees.jenkins.GitHubWebHook;
+import hudson.tools.*;
+import hudson.plugins.groovy.*;
 
 def runOrDie(command, String errorMessage){
   def process=command.execute()
@@ -21,13 +23,18 @@ def runOrDie(command, String errorMessage){
 
 println "Initializing from remote script"
 String jenkinsConfigText = runOrDie(['oc', 'get', 'configmaps/jenkins', '--template={{.data.config}}'], "'ConfigMaps/jenkins' was NOT found")
-String githubUsername=runOrDie(['sh', '-c', 'oc get secret/github-credentials --template={{.data.username}} | base64 --decode'], "'secret/github-credentials' was NOT nound")
-String githubPassword=runOrDie(['sh', '-c', 'oc get secret/github-credentials --template={{.data.password}} | base64 --decode'], "'secret/github-credentials' was NOT nound")
 def jenkinsConfig = new groovy.json.JsonSlurper().parseText(jenkinsConfigText?:'{}')
+
+String githubUsername=runOrDie(['sh', '-c', "oc get secret/${jenkinsConfig.'github-account.secret.name'} --template={{.data.username}} | base64 --decode"], "'secret/${jenkinsConfig.'github-account.secret.name'}' was NOT nound")
+String githubPassword=runOrDie(['sh', '-c', "oc get secret/${jenkinsConfig.'github-account.secret.name'} --template={{.data.password}} | base64 --decode"], "'secret/${jenkinsConfig.'github-account.secret.name'}' was NOT nound")
+
 
 println "Jenkins ConfigMap:"
 println "${jenkinsConfig}"
 
+
+String jenkinsRouteHost = ['sh', '-c', 'oc get route/jenkins --template={{.spec.host}}'].execute().text.trim()
+JenkinsLocationConfiguration.get().setUrl("https://${jenkinsRouteHost}/")
 
 /* TODO:
 - Create Jenkins Credetential "Secret Text" with id "github-access-token"
@@ -87,7 +94,7 @@ deployerCredentials.data.each { key, value ->
 */
 
 println "Configuring GitHub API"
-Jenkins.getInstance().getDescriptor(org.jenkinsci.plugins.github.config.GitHubPluginConfig.class)
+
 def ghCofigs = Jenkins.getInstance().getDescriptor(org.jenkinsci.plugins.github.config.GitHubPluginConfig.class).getConfigs();
 def ghServerConfig = new org.jenkinsci.plugins.github.config.GitHubServerConfig('github-access-token');
 ghServerConfig.setName('GitHub')
@@ -118,6 +125,21 @@ if (jenkinsConfig.globalLibraries) {
   Jenkins.getInstance().save()
 }
 
+//Registering Tools
+if (jenkinsConfig?.tools?.groovy) {
+  def groovyDescriptor = Jenkins.getInstance().getDescriptor("hudson.plugins.groovy.GroovyInstallation")
+  def groovyInstallations = groovyDescriptor.getInstallations()
+  //https://github.com/Accenture/adop-jenkins/blob/master/resources/init.groovy.d/adop_groovy.groovy
+  for (Map groovyTool: jenkinsConfig.tools?.groovy) {
+    println "Adding groovy '${groovyTool.version}' as '${groovyTool.name}'"
+    def installer = new GroovyInstaller(groovyTool.version)
+    def installSourceProperty = new InstallSourceProperty([installer])
+    def installation = new GroovyInstallation(groovyTool.name,"", [installSourceProperty])
+    groovyInstallations += installation
+  }
+  groovyDescriptor.setInstallations((GroovyInstallation[]) groovyInstallations)
+  Jenkins.getInstance().save()
+}
 
 
 if (jenkinsConfig.projects) {
@@ -137,6 +159,9 @@ if (jenkinsConfig.projects) {
   Jenkins.getInstance().save()
 }
 
+def registeredGHWebHooks = GitHubWebHook.get().reRegisterAllHooks();
+println "Called registerHooks() for ${registeredGHWebHooks.size()} items"
+
 def sa = org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval.get();
 [
   'method hudson.plugins.git.UserRemoteConfig getUrl',
@@ -148,6 +173,3 @@ def sa = org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval.get();
   sa.approveSignature(it);
 }
 
-
-String jenkinsRouteHost = ['sh', '-c', 'oc get route/jenkins --template={{.spec.host}}'].execute().text.trim()
-JenkinsLocationConfiguration.get().setUrl("https://${jenkinsRouteHost}/")
