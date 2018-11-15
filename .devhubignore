@@ -1,3 +1,5 @@
-apps
+apps/taiga/back
+apps/taiga/front
+apps/taiga/openshift
 cicd
 db

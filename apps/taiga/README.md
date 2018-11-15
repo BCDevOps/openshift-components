@@ -1,3 +1,10 @@
+---
+
+title: "Taiga for OpenShift"
+description: "A set of resources and customizations to deploy Taiga on BC Gov OpenShift."
+
+---
+
 # Taiga for OpenShift
 
 ## Intro
