@@ -1,3 +1,11 @@
+---
+
+title: "OpenShift Components"
+description: "A set of base images and deployable apps for use in OpenShift by BC Gov Developers."
+
+---
+
+
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 # OpenShift Components
