@@ -1,7 +1,7 @@
 ---
 
 title: "Taiga"
-description: "A set of resources and customizations to deploy Taiga (https://taiga.io/) btoopen source agile project management software on BC Gov's OpenShift platform."
+description: "A set of resources and customizations to deploy Taiga (https://taiga.io/) open source agile project management software on BC Gov's OpenShift platform."
 image: "https://taiga.io/images/logo-color.png"
 
 ---
