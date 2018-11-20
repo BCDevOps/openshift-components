@@ -1,7 +1,8 @@
 ---
 
-title: "Taiga for OpenShift"
-description: "A set of resources and customizations to deploy Taiga on BC Gov OpenShift."
+title: "Taiga"
+description: "A set of resources and customizations to deploy Taiga (https://taiga.io/) btoopen source agile project management software on BC Gov's OpenShift platform."
+image: "https://taiga.io/images/logo-color.png"
 
 ---
 
@@ -42,7 +43,7 @@ Note: **BCGov users will not need to build Taiga** as ImageStreams are provided 
 
 * You also need the `oc` command line tool.
 
-* You will need to create an OAuth app in GitHub as the client ID and secret are required for the Taiga GitHub aith plugin.  OAuth apps at the organization level are confirmed working.  User level OAuth apps have not been tested, but should also work.  The "Authorization callback URL" in GitHub should be look like: `https://<your taiga frontend url>/login`, where `<your taiga frontend url>` matches the value you will provide as `ROUTE_URL` when you deploy the frontend below.
+* You will need to create an OAuth app in GitHub as the client ID and secret are required for the Taiga GitHub auth plugin.  OAuth apps at the organization level are confirmed working.  User level OAuth apps have not been tested, but should also work.  The "Authorization callback URL" in GitHub should be look like: `https://<your taiga frontend url>/login`, where `<your taiga frontend url>` matches the value you will provide as `ROUTE_URL` when you deploy the frontend below.
 
 * It is assumed that you want to run all of Taiga's components in the same OpenShift project space
 

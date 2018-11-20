@@ -1,4 +1,11 @@
-# OpenShift Oracle InstantClient #
+---
+
+title: Oracle Instant Client Base Image
+description: "An image that can be used for chained builds that require Oracle Instant Client software RPM's."
+
+---
+
+# Oracle Instant Client Libraries Base Image
 
 This repository can be used for chained builds that require Oracle Instant Client software RPM's.
 The docker image is a base rhl7 image containing the oracle rpms.
