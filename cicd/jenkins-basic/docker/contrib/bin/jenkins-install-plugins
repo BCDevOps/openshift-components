@@ -15,7 +15,7 @@
 
 set -o pipefail
 verbose=0
-if [[ "$VERBOSE" == "true"  || "$VERBOSE" == "1" ]]; then
+if [[ "${VERBOSE:-false}" == "true"  || "${VERBOSE:-false}" == "1" ]]; then
     verbose=1
     set -x
 fi
