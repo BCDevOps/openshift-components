@@ -231,7 +231,7 @@ function doDownload() {
     fi
 
     echo "Downloading plugin: $plugin from $url"
-    curl --connect-timeout "${CURL_CONNECTION_TIMEOUT:-20}" --retry "${CURL_RETRY:-5}" --retry-delay "${CURL_RETRY_DELAY:-0}" --retry-max-time "${CURL_RETRY_MAX_TIME:-60}" -f -L "$url" -o "$jpi"
+    curl --connect-timeout "${CURL_CONNECTION_TIMEOUT:-20}" --retry "${CURL_RETRY:-5}" --retry-delay "${CURL_RETRY_DELAY:-0}" --retry-max-time "${CURL_RETRY_MAX_TIME:-60}" -s -f -L "$url" -o "$jpi"
     return $?
 }
 
@@ -240,7 +240,7 @@ function checkIntegrity() {
     plugin="$1"
     jpi="$(getArchiveFilename "$plugin")"
 
-    zip -T "$jpi" #>/dev/null
+    zip -T "$jpi" >/dev/null
     return $?
 }
 
