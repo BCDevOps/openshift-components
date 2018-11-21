@@ -14,6 +14,7 @@
 # pluginId:pluginVersion
 
 set -o pipefail
+set -x
 
 # BEGIN - From https://raw.githubusercontent.com/jenkinsci/docker/master/jenkins-support
 # compare if version1 < version2
@@ -235,7 +236,7 @@ function checkIntegrity() {
     plugin="$1"
     jpi="$(getArchiveFilename "$plugin")"
 
-    zip -T "$jpi" >/dev/null
+    zip -T "$jpi" #>/dev/null
     return $?
 }
 
