@@ -48,7 +48,7 @@ app {
                         'SOURCE_REPOSITORY_URL': "${app.git.uri}",
                         'SOURCE_REPOSITORY_REF': "${app.git.ref}",
                         'SOURCE_IMAGE_STREAM_NAMESPACE': "bcgov",
-                        'SOURCE_IMAGE_STREAM_TAG': "jenkins-basic@sha256:c64f00695c8b595a8e39108edb016bf7000f476d0c2451b49476b3a05560f006"
+                        'SOURCE_IMAGE_STREAM_TAG': "jenkins-basic:v2-latest"
                     ]
                 ]
         ]
