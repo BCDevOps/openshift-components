@@ -98,7 +98,7 @@ environments {
                 id = "${app.name}${vars.deployment.suffix}"
                 name = "${opt.'deployment-name'?:app.name}"
                 namespace = app.namespaces[env.name].namespace
-                version = "${vars.deployment.name}-${vars.deployment.env.name}" //app-version  and tag
+                version = "v2-latest" //app-version  and tag
             }
         }
     }

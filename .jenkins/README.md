@@ -8,6 +8,7 @@ oc -n bcgov-tools process -f 'openshift/secrets.json' -p 'GH_USERNAME=' -p 'GH_P
 ## Grant Admin access to Jenkins Service account in each managed namespace
 ```
 oc -n bcgov policy add-role-to-user 'admin' 'system:serviceaccounts:bcgov-tools:jenkins'
+oc -n bcgov-tools policy add-role-to-group 'system:image-puller' 'system:serviceaccounts:bcgov'
 ```
 
 # Build
