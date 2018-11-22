@@ -84,7 +84,7 @@
                   "type": "Docker",
                   "dockerStrategy": {
                       "from": {
-                          "kind": "ImageStreamTag",
+                          "kind": "ImageStreamImage",
                           "name": "${SOURCE_IMAGE_STREAM_TAG}",
                           "namespace": "${SOURCE_IMAGE_STREAM_NAMESPACE}"
                       }
