@@ -27,7 +27,7 @@ if ('prod'.equalsIgnoreCase(System.getenv('ENV_NAME'))){
                         for (def hook:ghRepository.getHooks()){
                             //println hook
                             hooks.each{ String name, Map newHook ->
-                                if (hook.getConfig() === null || hook.getConfig()['url'] == null){
+                                if (hook.getConfig() == null || hook.getConfig()['url'] == null){
                                     println "Something is odd .. a hook in '${fullName}' is null: ${hook}"
                                 }else if (hook.getConfig()['url'].startsWith(newHook.url)){
                                     newHook['_hook']=hook
