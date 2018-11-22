@@ -10,10 +10,6 @@ oc -n bcgov-tools process -f 'openshift/secrets.json' -p 'GH_USERNAME=' -p 'GH_P
 oc -n bcgov policy add-role-to-user 'admin' 'system:serviceaccounts:bcgov-tools:jenkins'
 ```
 
-
-
-oc -n bcgov-tools process -f 'openshift/secrets.json' -p 'GH_USERNAME=cvarjao' -p 'GH_PASSWORD=b3fb0f340e2b31281aadfbe4cc3201c33d67707d' | oc  -n bcgov-tools create -f -
-
 # Build
 ```
 .jenkins/pipeline-cli --config=.jenkins/openshift/config.groovy --pr=19
