@@ -8,7 +8,7 @@ pipeline {
             agent { label 'build' }
             steps {
                 script {
-                    def filesInThisCommit = sh(script:"git diff --name-only HEAD~1..HEAD | grep '^cicd/jenkins-basic/'", returnStatus: false, returnStdout: true).split("\n")
+                    def filesInThisCommit = sh(script:"git diff --name-only HEAD~1..HEAD | grep '^cicd/jenkins-basic/' || echo -n ''", returnStatus: false, returnStdout: true).split("\n")
                     def hasChangesInPath = filesInThisCommit.size() > 0
                     if (!currentBuild.rawBuild.getCauses()[0].toString().contains('UserIdCause') && !hasChangesInPath){
                         currentBuild.rawBuild.delete()
