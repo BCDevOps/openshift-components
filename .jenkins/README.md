@@ -1,4 +1,11 @@
 # Setup
+## Create the Jenkins Configuration
+- copy xxx job configuration file and modify
+  - jenkins.branch.BranchSource.id
+  - repoOwner
+  - repository
+  - scriptPath
+
 ## Create secrets
 Use the provided `openshift/secrets.json` as follow:
 ```
@@ -23,5 +30,4 @@ oc -n bcgov-tools policy add-role-to-group 'system:image-puller' 'system:service
 ## Undeploy/Cleanup
 ```
 oc -n bcgov-tools delete is/jenkins
-
 ```
