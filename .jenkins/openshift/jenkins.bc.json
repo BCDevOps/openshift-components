@@ -25,6 +25,10 @@
           "required": true,
           "value": "v1.0.0"
       },{
+          "name": "SOURCE_IMAGE_STREAM_NAMESPACE",
+          "required": true,
+          "value": "bcgov"
+      },{
           "name": "SOURCE_IMAGE_STREAM_TAG",
           "required": true,
           "value": "jenkins-basic:v2-latest"
@@ -81,7 +85,8 @@
                   "dockerStrategy": {
                       "from": {
                           "kind": "ImageStreamTag",
-                          "name": "${SOURCE_IMAGE_STREAM_TAG}"
+                          "name": "${SOURCE_IMAGE_STREAM_TAG}",
+                          "namespace": "${SOURCE_IMAGE_STREAM_NAMESPACE}"
                       }
                   }
               },

@@ -46,7 +46,9 @@ app {
                         'SUFFIX': "${app.build.suffix}",
                         'VERSION': app.build.version,
                         'SOURCE_REPOSITORY_URL': "${app.git.uri}",
-                        'SOURCE_REPOSITORY_REF': "${app.git.ref}"
+                        'SOURCE_REPOSITORY_REF': "${app.git.ref}",
+                        'SOURCE_IMAGE_STREAM_NAMESPACE': "bcgov",
+                        'SOURCE_IMAGE_STREAM_TAG': "jenkins-basic:v2-latest"
                     ]
                 ]
         ]
