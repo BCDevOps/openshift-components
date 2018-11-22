@@ -12,7 +12,7 @@ pipeline {
                     echo "${filesInThisCommit}"
                     echo "${currentBuild.rawBuild.getCauses()[0].toString()}"
                     def hasChangesInPath = filesInThisCommit.size() > 0
-                    if (!hasChangesInPath){
+                    if (!currentBuild.rawBuild.getCauses()[0].toString().contains('UserIdCause') && !hasChangesInPath){
                         currentBuild.rawBuild.delete()
                         error("No changes detected in the path ('^cicd/jenkins-basic/')")
                     }
