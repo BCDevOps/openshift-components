@@ -60,7 +60,7 @@ fi
 JENKINS_OPTIONS="${JENKINS_OPTIONS} ${JENKINS_OPTIONS_APPEND}"
 
 if [[ -z "${JENKINS_JAVA_OPTIONS}" ]]; then
-    JENKINS_JAVA_OPTIONS="$JENKINS_MEM_OPTS $JAVA_GC_OPTS $JAVA_DIAGNOSTICS -Dfile.encoding=UTF8 -Djavamelody.displayed-counters=log,error -XX:ErrorFile=/var/lib/jenkins/logs/jvm.error.log  --show-version $JENKINS_OPTIONS"
+    JENKINS_JAVA_OPTIONS="$JENKINS_MEM_OPTS $JAVA_GC_OPTS $JAVA_DIAGNOSTICS -Dfile.encoding=UTF8 -Djavamelody.displayed-counters=log,error -XX:ErrorFile=/var/lib/jenkins/logs/jvm.error.log -showversion $JENKINS_OPTIONS"
 fi
 
 JENKINS_JAVA_OPTIONS="${JENKINS_JAVA_OPTIONS} ${JENKINS_JAVA_OPTIONS_APPEND}"
