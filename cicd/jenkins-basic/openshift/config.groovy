@@ -36,7 +36,7 @@ app {
         timeoutInSeconds = 60*20 // 20 minutes
         templates = [
                 [
-                    'file':'cicd/jenkins-basic/build.yaml',
+                    'file':'cicd/jenkins-basic/openshift/build.yaml',
                     'params':[
                         'NAME': app.build.name,
                         'SUFFIX': app.build.suffix,
@@ -60,11 +60,10 @@ app {
 
         namespace = "${vars.deployment.namespace}"
         timeoutInSeconds = 60*20 // 20 minutes
-        host = "${app.deployment.id}-${app.deployment.namespace}.pathfinder.gov.bc.ca"
 
         templates = [
                 [
-                    'file':'cicd/jenkins-basic/deploy.yaml',
+                    'file':'cicd/jenkins-basic/openshift/deploy.yaml',
                     'params':[
                         'NAME': app.deployment.name
                     ]
