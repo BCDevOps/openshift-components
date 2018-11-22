@@ -56,6 +56,9 @@ if ('prod'.equalsIgnoreCase(System.getenv('ENV_NAME'))){
                 } //for
             } catch (ex){
                 println "Error registering webhook for ${job.name}"
+                println(ex.toString());
+                println(ex.getMessage());
+                println(ex.getStackTrace()); 
             }
         }
     }

@@ -10,5 +10,5 @@ Provides a basic/lightweight installation of Jenkins
 
 ## How to Deploy:
 ```
-( cd "$(git rev-parse --show-toplevel)" && .jenkins/pipeline-cli deploy --config=cicd/jenkins-basic/openshift/config.groovy --pr=19 --env=dev )
+( cd "$(git rev-parse --show-toplevel)" && .jenkins/pipeline-cli deploy --config=cicd/jenkins-basic/openshift/config.groovy --pr=19 --env=prod )
 ```

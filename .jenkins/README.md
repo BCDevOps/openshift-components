@@ -13,14 +13,12 @@ oc -n bcgov-tools policy add-role-to-group 'system:image-puller' 'system:service
 
 # Build
 ```
-cd "$(git rev-parse --show-toplevel)"
-.jenkins/pipeline-cli build --config=.jenkins/openshift/config.groovy --pr=19
+( cd "$(git rev-parse --show-toplevel)" && .jenkins/pipeline-cli build --config=.jenkins/openshift/config.groovy --pr=19 )
 ```
 
 # Deploy
 ```
-cd "$(git rev-parse --show-toplevel)"
-.jenkins/pipeline-cli deploy --config=.jenkins/openshift/config.groovy --pr=19 --env=dev
+( cd "$(git rev-parse --show-toplevel)" && .jenkins/pipeline-cli deploy --config=.jenkins/openshift/config.groovy --pr=19 --env=prod )
 ```
 ## Undeploy/Cleanup
 ```
