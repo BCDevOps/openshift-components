@@ -22,3 +22,8 @@ cd "$(git rev-parse --show-toplevel)"
 cd "$(git rev-parse --show-toplevel)"
 .jenkins/pipeline-cli deploy --config=.jenkins/openshift/config.groovy --pr=19 --env=dev
 ```
+## Undeploy/Cleanup
+```
+oc -n bcgov-tools delete is/jenkins
+
+```
