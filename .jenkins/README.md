@@ -12,10 +12,12 @@ oc -n bcgov policy add-role-to-user 'admin' 'system:serviceaccounts:bcgov-tools:
 
 # Build
 ```
-.jenkins/pipeline-cli --config=.jenkins/openshift/config.groovy --pr=19
+cd "$(git rev-parse --show-toplevel)"
+.jenkins/pipeline-cli build --config=.jenkins/openshift/config.groovy --pr=19
 ```
 
 # Deploy
 ```
-.jenkins/pipeline-cli --config=.jenkins/openshift/config.groovy --pr=19 --env=dev
+cd "$(git rev-parse --show-toplevel)"
+.jenkins/pipeline-cli deploy --config=.jenkins/openshift/config.groovy --pr=19 --env=dev
 ```
