@@ -8,10 +8,10 @@ pipeline {
             agent { label 'build' }
             steps {
                 script {
-                    def hasChangesInPath = sh(script:"[ \"\$(git diff --name-only HEAD~1..HEAD | grep -v '^example/backend' | wc -l)\" -eq 0 ] && exit 999 || exit 0", returnStatus: true) == 0
+                    def hasChangesInPath = sh(script:"[ \"\$(git diff --name-only HEAD~1..HEAD | grep '^.jenkins/' | wc -l)\" -eq 0 ] && exit 999 || exit 0", returnStatus: true) == 0
                     if (!hasChangesInPath){
                         currentBuild.rawBuild.delete()
-                        error("No changes detected in the path (!'^example/')")
+                        error("No changes detected in the path ('^.jenkins/')")
                     }
                 }
                 echo "Aborting all running jobs ..."
@@ -20,25 +20,14 @@ pipeline {
                 }
                 echo "BRANCH_NAME:${env.BRANCH_NAME}\nCHANGE_ID:${env.CHANGE_ID}\nCHANGE_TARGET:${env.CHANGE_TARGET}"
                 echo "Building ..."
-                sh ".jenkins/pipeline/cd-build --pr=${CHANGE_ID} --config=example/jenkins/openshift/config.groovy"
+                sh ".jenkins/pipeline-cli build --pr=${CHANGE_ID} --config=.jenkins/openshift/config.groovy"
             }
         }
         stage('Deploy (DEV)') {
             agent { label 'deploy' }
             steps {
                 echo "Deploying ..."
-                sh ".jenkins/pipeline/cd-deploy --pr=${CHANGE_ID} --config=example/jenkins/openshift/config.groovy --env=dev"
-            }
-        }
-        stage('Deploy (TEST)') {
-            agent { label 'deploy' }
-            input {
-                message "Should we continue with deployment to TEST?"
-                ok "Yes!"
-            }
-            steps {
-                echo "Deploying ..."
-                sh ".jenkins/pipeline/cd-deploy --pr=${CHANGE_ID} --config=example/jenkins/openshift/config.groovy --env=test"
+                sh ".jenkins/pipeline-cli deploy --pr=${CHANGE_ID} --config=.jenkins/openshift/config.groovy --env=dev"
             }
         }
         stage('Deploy (PROD)') {
@@ -49,7 +38,7 @@ pipeline {
             }
             steps {
                 echo "Deploying ..."
-                sh ".jenkins/pipeline/cd-deploy --pr=${CHANGE_ID} --config=example/jenkins/openshift/config.groovy --env=prod"
+                sh ".jenkins/pipeline-cli deploy --pr=${CHANGE_ID} --config=.jenkins/openshift/config.groovy --env=prod"
             }
         }
         stage('Acceptance') {
@@ -60,9 +49,8 @@ pipeline {
             }
             steps {
                 echo "Cleaning ..."
-                sh ".jenkins/pipeline/cd-clean --pr=${CHANGE_ID} --config=example/jenkins/openshift/config.groovy"
+                sh ".jenkins/pipeline-cli cleanup --pr=${CHANGE_ID} --config=.jenkins/openshift/config.groovy"
             }
         }
-        
     }
 }
