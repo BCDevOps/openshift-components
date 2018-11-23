@@ -36,8 +36,8 @@ if ('prod'.equalsIgnoreCase(System.getenv('ENV_NAME'))){
                         }
                         //Create Hooks
                         hooks.each{ String name, Map newHook ->
+                            Map hookCfg = ['url':newHook.url]
                             if (newHook._hook == null){
-                                Map hookCfg = ['url':newHook.url]
                                 if (newHook.qs){
                                     if (hookCfg.url.contains('?')){
                                         hookCfg.url=hookCfg.url+'&'
