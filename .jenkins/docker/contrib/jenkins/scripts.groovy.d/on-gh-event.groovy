@@ -63,6 +63,7 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                     ['bcgov-tools', 'bcgov'].forEach(namespace =>{
                         //BuildConfig Output Images
                         def ocGetBcRet = exec(['oc',"--namespace=${namespace}",'get','bc','-l',"env-id=pr-${payload.number},env-name!=prod", '-o', 'jsonpath={range .items[*]}{.spec.output.to.namespace}/{.spec.output.to.name}{"\n"}{end}'])
+                        println ocGetBcRet
                         if (ocGetBcRet.status == 0 ){
                             ocGetBcRet.stdout.trim().split('\n').forEach(item => {
                                 if (item.length() > 3){
@@ -76,9 +77,10 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                         }
 
                         //DeploymentConfig Images
-                        def ocGetBcRet = exec(['oc',"--namespace=${namespace}",'get','dc','-l',"env-id=pr-${payload.number},env-name!=prod", '-o', 'jsonpath={range .items[*]}{range .spec.triggers[*]}{.imageChangeParams.from.namespace}/{.imageChangeParams.from.name}{"\n"}{end}{end}'])
-                        if (ocGetBcRet.status == 0 ){
-                            ocGetBcRet.stdout.trim().split('\n').forEach(item => {
+                        def ocGetDcRet = exec(['oc',"--namespace=${namespace}",'get','dc','-l',"env-id=pr-${payload.number},env-name!=prod", '-o', 'jsonpath={range .items[*]}{range .spec.triggers[*]}{.imageChangeParams.from.namespace}/{.imageChangeParams.from.name}{"\n"}{end}{end}'])
+                        println ocGetDcRet
+                        if (ocGetDcRet.status == 0 ){
+                            ocGetDcRet.stdout.trim().split('\n').forEach(item => {
                                 if (item.length() > 3){
                                     def reference=item.split('/')
                                     if (reference[0].length()==0){
@@ -90,8 +92,8 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                         }
 
                         //oc get dc -l 'env-id=pr-19,env-name!=prod' -o 'jsonpath={range .items[*]}{range .spec.triggers[*]}{.imageChangeParams.from.namespace}/{.imageChangeParams.from.name}{"\n"}{end}{end}'
-                        println exec(['oc', '--namespace=bcgov-tools', 'delete', 'all', '-l', "env-id=pr-${payload.number},env-name!=prod"])
-                        println exec(['oc', '--namespace=bcgov-tools', 'delete', 'PersistentVolumeClaim,Secret,ConfigMap,RoleBinding', '-l', "env-id=pr-${payload.number},env-name!=prod"])
+                        println exec(['oc', "--namespace=${reference[0]}", 'delete', 'all', '-l', "env-id=pr-${payload.number},env-name!=prod"])
+                        println exec(['oc', "--namespace=${reference[0]}", 'delete', 'PersistentVolumeClaim,Secret,ConfigMap,RoleBinding', '-l', "env-id=pr-${payload.number},env-name!=prod"])
                     })
                 }
             }else if ("issue_comment" == ghEventType){
