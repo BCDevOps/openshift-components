@@ -37,8 +37,7 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
         String buildNumber = build.getNumber()
         String fullName = build.getProject().getFullName()
 
-        //println "ghEventType:"
-        //println "${ghEventType}"
+        println "GitHub Event: ${ghEventType}"
 
         //println "ghPayload:"
         //println "${ghPayload}"
@@ -50,6 +49,7 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
         try{
             if ("pull_request" == ghEventType){
                 def payload = new JsonSlurper().parseText(ghPayload)
+                println "GitHub Action: ${payload.action}"
                 if ("closed" == payload.action){
                     File gitWorkDir = workDir
                     def ghRepo=com.cloudbees.jenkins.GitHubRepositoryName.create(payload.repository.clone_url).resolveOne()
@@ -96,6 +96,7 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                 }
             }else if ("issue_comment" == ghEventType){
                 def payload = new JsonSlurper().parseText(ghPayload)
+                println "GitHub Action: ${payload.action}"
                 if ("created" == payload.action && payload.issue.pull_request !=null ){
                     String comment = payload.comment.body.trim()
 
