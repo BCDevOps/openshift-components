@@ -359,7 +359,7 @@
                                 },
                                 "terminationMessagePath": "/dev/termination-log",
                                 "terminationMessagePolicy": "File",
-                                "imagePullPolicy": "IfNotPresent"
+                                "imagePullPolicy": "Always"
                             }
                         ],
                         "restartPolicy": "Always",
@@ -543,7 +543,7 @@
                                 },
                                 "terminationMessagePath": "/dev/termination-log",
                                 "terminationMessagePolicy": "File",
-                                "imagePullPolicy": "IfNotPresent"
+                                "imagePullPolicy": "Always"
                             }
                         ],
                         "restartPolicy": "Always",
