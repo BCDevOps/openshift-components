@@ -63,7 +63,7 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                     println "Clone Url:${cloneUrl}"
                     println "Checkout Branch:${sourceBranch}"
 
-                    String selector = "env-id=pr-${payload.number},env-name!=prod,github-owner=${repoName},github-repo=${repoName}"
+                    String selector = "env-id=pr-${payload.number},env-name!=prod,github-owner=${repoOwner},github-repo=${repoName}"
                     ['bcgov-tools', 'bcgov'].each({ namespace ->
                         //BuildConfig Output Images
                         def ocGetBcRet = exec(['oc',"--namespace=${namespace}",'get','bc','-l',selector, '-o', 'jsonpath={range .items[*]}{.spec.output.to.namespace}/{.spec.output.to.name}{"\\n"}{end}'])
