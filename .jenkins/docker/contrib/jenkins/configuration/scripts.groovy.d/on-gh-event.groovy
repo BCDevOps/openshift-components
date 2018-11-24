@@ -56,13 +56,17 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                     boolean isFromCollaborator=ghRepo.root.retrieve().asHttpStatusCode(ghRepo.getApiTailUrl("collaborators/${payload.pull_request.user.login}")) == 204
                     String cloneUrl = payload.repository.clone_url
                     String sourceBranch = isFromCollaborator?"refs/pull/${payload.number}/head":"refs/heads/${payload.pull_request.base.ref}"
+                    String repoName = payload.repository.name.toLowerCase()
+                    String repoOwner = payload.repository.owner.login.toLowerCase()
+
                     println "Is Collaborator:${isFromCollaborator} (${payload.pull_request.user.login})"
                     println "Clone Url:${cloneUrl}"
                     println "Checkout Branch:${sourceBranch}"
 
+                    String selector = "env-id=pr-${payload.number},env-name!=prod,github-owner=${repoName},github-repo=${repoName}"
                     ['bcgov-tools', 'bcgov'].each({ namespace ->
                         //BuildConfig Output Images
-                        def ocGetBcRet = exec(['oc',"--namespace=${namespace}",'get','bc','-l',"env-id=pr-${payload.number},env-name!=prod", '-o', 'jsonpath={range .items[*]}{.spec.output.to.namespace}/{.spec.output.to.name}{"\\n"}{end}'])
+                        def ocGetBcRet = exec(['oc',"--namespace=${namespace}",'get','bc','-l',selector, '-o', 'jsonpath={range .items[*]}{.spec.output.to.namespace}/{.spec.output.to.name}{"\\n"}{end}'])
                         println ocGetBcRet
                         if (ocGetBcRet.status == 0 ){
                             ocGetBcRet.out.toString().trim().split('\n').each({ item ->
@@ -77,7 +81,7 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                         }
 
                         //DeploymentConfig Images
-                        def ocGetDcRet = exec(['oc',"--namespace=${namespace}",'get','dc','-l',"env-id=pr-${payload.number},env-name!=prod", '-o', 'jsonpath={range .items[*]}{range .spec.triggers[*]}{.imageChangeParams.from.namespace}/{.imageChangeParams.from.name}{"\\n"}{end}{end}'])
+                        def ocGetDcRet = exec(['oc',"--namespace=${namespace}",'get','dc','-l',selector, '-o', 'jsonpath={range .items[*]}{range .spec.triggers[*]}{.imageChangeParams.from.namespace}/{.imageChangeParams.from.name}{"\\n"}{end}{end}'])
                         println ocGetDcRet
                         if (ocGetDcRet.status == 0 ){
                             ocGetDcRet.out.toString().trim().split('\n').each({ item ->
@@ -92,8 +96,8 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                         }
 
                         //oc get dc -l 'env-id=pr-19,env-name!=prod' -o 'jsonpath={range .items[*]}{range .spec.triggers[*]}{.imageChangeParams.from.namespace}/{.imageChangeParams.from.name}{"\n"}{end}{end}'
-                        //println exec(['oc', "--namespace=${namespace}", 'delete', 'all', '-l', "env-id=pr-${payload.number},env-name!=prod"])
-                        //println exec(['oc', "--namespace=${namespace}", 'delete', 'PersistentVolumeClaim,Secret,ConfigMap,RoleBinding', '-l', "env-id=pr-${payload.number},env-name!=prod"])
+                        println exec(['oc', "--namespace=${namespace}", 'delete', 'all', '-l', selector])
+                        println exec(['oc', "--namespace=${namespace}", 'delete', 'PersistentVolumeClaim,Secret,ConfigMap,RoleBinding', '-l', selector])
                     })
                 }
             }else if ("issue_comment" == ghEventType){
