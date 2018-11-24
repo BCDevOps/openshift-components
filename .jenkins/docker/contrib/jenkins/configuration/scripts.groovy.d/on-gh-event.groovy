@@ -60,7 +60,7 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                     println "Clone Url:${cloneUrl}"
                     println "Checkout Branch:${sourceBranch}"
 
-                    ['bcgov-tools', 'bcgov'].forEach(namespace =>{
+                    ['bcgov-tools', 'bcgov'].each({ namespace ->
                         //BuildConfig Output Images
                         def ocGetBcRet = exec(['oc',"--namespace=${namespace}",'get','bc','-l',"env-id=pr-${payload.number},env-name!=prod", '-o', 'jsonpath={range .items[*]}{.spec.output.to.namespace}/{.spec.output.to.name}{"\n"}{end}'])
                         println ocGetBcRet
