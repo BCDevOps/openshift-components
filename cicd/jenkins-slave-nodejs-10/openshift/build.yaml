@@ -34,7 +34,7 @@ objects:
   kind: BuildConfig
   metadata:
     creationTimestamp: null
-    name: ${NAME}
+    name: ${NAME}${SUFFIX}
   spec:
     failedBuildsHistoryLimit: 2
     output:
