@@ -10,7 +10,7 @@ objects:
     creationTimestamp: null
     name: rhel-atomic
     labels:
-        shared: true
+        shared: 'true'
   spec:
     lookupPolicy:
       local: false
@@ -28,7 +28,7 @@ objects:
     creationTimestamp: null
     name: ${NAME}
     labels:
-        shared: true
+        shared: 'true'
   spec:
     lookupPolicy:
       local: false
