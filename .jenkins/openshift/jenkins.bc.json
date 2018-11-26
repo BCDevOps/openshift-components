@@ -47,7 +47,10 @@
           "apiVersion": "v1",
           "metadata": {
               "name": "${NAME}",
-              "creationTimestamp": null
+              "creationTimestamp": null,
+              "labels":{
+                  "shared": "true"
+              }
           },
           "spec": {
               "lookupPolicy": {
