@@ -1,5 +1,5 @@
 app {
-    name = "${opt.'name'?:'jenkins-slave-nodejs-10'}"
+    name = "${opt.'name'?:'jenkins-slave-bddstack'}"
     namespaces { //can't call environments :(
         'build'{
             namespace = 'bcgov-tools'
@@ -36,7 +36,7 @@ app {
         timeoutInSeconds = 60*20 // 20 minutes
         templates = [
                 [
-                    'file':'cicd/jenkins-slave-nodejs-10/openshift/build.yaml',
+                    'file':'cicd/jenkins-slave-bddstack/openshift/build.yaml',
                     'params':[
                         'NAME': app.build.name,
                         'SUFFIX': app.build.suffix,
@@ -46,60 +46,5 @@ app {
                     ]
                 ]
         ]
-    }
-
-    deployment {
-        env {
-            name = vars.deployment.env.name // env-name
-            id = vars.deployment.env.id
-        }
-        suffix = "${vars.deployment.suffix}" // app (unique name across all deployments int he namespace)
-        version = "${vars.deployment.version}" //app-version  and tag
-        name = "${vars.deployment.name}"
-        id = "${app.deployment.name}${app.deployment.suffix}" // app (unique name across all deployments int he namespace)
-
-        namespace = "${vars.deployment.namespace}"
-        timeoutInSeconds = 60*20 // 20 minutes
-
-        templates = [
-                [
-                    'file':'cicd/jenkins-slave-nodejs-10/openshift/deploy.yaml',
-                    'params':[
-                        'NAME': app.deployment.name
-                    ]
-                ]
-        ]
-    }
-}
-
-environments {
-    'dev' {
-        vars {
-            deployment {
-                env {
-                    name ="dev"
-                    id = "pr-${opt.'pr'}"
-                }
-                suffix = "-dev-${opt.'pr'}"
-                name = "${opt.'deployment-name'?:app.name}"
-                namespace = app.namespaces[env.name].namespace
-                version = "${vars.deployment.name}-${vars.deployment.env.name}-v${opt.'pr'}" //app-version  and tag
-            }
-        }
-    }
-    'prod' {
-        vars {
-            deployment {
-                env {
-                    name ="prod"
-                    id = "pr-${opt.'pr'}"
-                }
-                suffix = ''
-                id = "${app.name}${vars.deployment.suffix}"
-                name = "${opt.'deployment-name'?:app.name}"
-                namespace = app.namespaces[env.name].namespace
-                version = "v3.10-10-latest" //app-version  and tag
-            }
-        }
     }
 }

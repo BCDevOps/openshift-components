@@ -27,7 +27,7 @@ pipeline {
                 }
                 echo "BRANCH_NAME:${env.BRANCH_NAME}\nCHANGE_ID:${env.CHANGE_ID}\nCHANGE_TARGET:${env.CHANGE_TARGET}"
                 echo "Building ..."
-                sh ".jenkins/pipeline-cli build --pr=${CHANGE_ID} --config=cicd/jenkins-slave-nodejs-10/openshift/config.groovy"
+                sh ".jenkins/pipeline-cli build --pr=${CHANGE_ID} --config=${env.SOURCE_DIR}/openshift/config.groovy"
             }
         }
         stage('Tag as latest') {
