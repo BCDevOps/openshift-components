@@ -32,26 +32,26 @@ pipeline {
         stage('Tag as latest') {
             agent { label 'deploy' }
             input {
-                message "Should we continue with tagging this image as ${BASE_VERSION}-latest?"
+                message "Should we continue with tagging this image as ${env.BASE_VERSION}-latest?"
                 ok "Yes!"
             }
             steps {
-                echo "Tagging ${IMAGE_STREAM_NAME}:${BASE_VERSION}-latest and ${IMAGE_STREAM_NAME}:latest"
-                sh "oc -n 'bcgov-tools' ${IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${IMAGE_STREAM_NAME}:${BASE_VERSION}-latest"
-                sh "oc -n 'bcgov' tag bcgov-tools/${IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${IMAGE_STREAM_NAME}:${BASE_VERSION}-latest"
-                sh "oc -n 'bcgov' tag bcgov-tools/${IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${IMAGE_STREAM_NAME}:latest"
+                echo "Tagging ${env.IMAGE_STREAM_NAME}:${env.BASE_VERSION}-latest and ${env.IMAGE_STREAM_NAME}:latest"
+                sh "oc -n 'bcgov-tools' ${env.IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${env.IMAGE_STREAM_NAME}:${env.BASE_VERSION}-latest"
+                sh "oc -n 'bcgov' tag bcgov-tools/${env.IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${env.IMAGE_STREAM_NAME}:${env.BASE_VERSION}-latest"
+                sh "oc -n 'bcgov' tag bcgov-tools/${env.IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${env.IMAGE_STREAM_NAME}:latest"
             }
         }
         stage('Tag as stable') {
             agent { label 'deploy' }
             input {
-                message "Should we continue with tagging this image as ${BASE_VERSION}-stable?"
+                message "Should we continue with tagging this image as ${env.BASE_VERSION}-stable?"
                 ok "Yes!"
             }
             steps {
-                echo "Tagging ${IMAGE_STREAM_NAME}:${BASE_VERSION}-stable and ${IMAGE_STREAM_NAME}:stable"
-                sh "oc -n 'bcgov' tag bcgov-tools/${IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${IMAGE_STREAM_NAME}:${BASE_VERSION}-stable"
-                sh "oc -n 'bcgov' tag bcgov-tools/${IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${IMAGE_STREAM_NAME}:stable"
+                echo "Tagging ${env.IMAGE_STREAM_NAME}:${env.BASE_VERSION}-stable and ${env.IMAGE_STREAM_NAME}:stable"
+                sh "oc -n 'bcgov' tag bcgov-tools/${env.IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${env.IMAGE_STREAM_NAME}:${env.BASE_VERSION}-stable"
+                sh "oc -n 'bcgov' tag bcgov-tools/${env.IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${env.IMAGE_STREAM_NAME}:stable"
             }
         }
         stage('Acceptance') {
