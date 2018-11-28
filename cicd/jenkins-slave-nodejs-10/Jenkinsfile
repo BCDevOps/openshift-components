@@ -3,6 +3,10 @@ pipeline {
     options {
         disableResume()
     }
+    environment {
+        BASE_VERSION = 'v10'
+        IMAGE_STREAM_NAME = 'jenkins-slave-nodejs-10'
+    }
     stages {
         stage('Build') {
             agent { label 'build' }
@@ -25,26 +29,39 @@ pipeline {
                 sh ".jenkins/pipeline-cli build --pr=${CHANGE_ID} --config=cicd/jenkins-slave-nodejs-10/openshift/config.groovy"
             }
         }
-        stage('Deploy (PROD)') {
+        stage('Tag as latest') {
             agent { label 'deploy' }
             input {
-                message "Should we continue with deployment to PROD?"
+                message "Should we continue with tagging this image as ${BASE_VERSION}-latest?"
                 ok "Yes!"
             }
             steps {
-                echo "Deploying ..."
-                sh ".jenkins/pipeline-cli deploy --config=cicd/jenkins-slave-nodejs-10/openshift/config.groovy --pr=${CHANGE_ID} --env=prod"
+                echo "Tagging ${IMAGE_STREAM_NAME}:${BASE_VERSION}-latest and ${IMAGE_STREAM_NAME}:latest"
+                sh "oc -n 'bcgov-tools' ${IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${IMAGE_STREAM_NAME}:${BASE_VERSION}-latest"
+                sh "oc -n 'bcgov' tag bcgov-tools/${IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${IMAGE_STREAM_NAME}:${BASE_VERSION}-latest"
+                sh "oc -n 'bcgov' tag bcgov-tools/${IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${IMAGE_STREAM_NAME}:latest"
+            }
+        }
+        stage('Tag as stable') {
+            agent { label 'deploy' }
+            input {
+                message "Should we continue with tagging this image as ${BASE_VERSION}-stable?"
+                ok "Yes!"
+            }
+            steps {
+                echo "Tagging ${IMAGE_STREAM_NAME}:${BASE_VERSION}-stable and ${IMAGE_STREAM_NAME}:stable"
+                sh "oc -n 'bcgov' tag bcgov-tools/${IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${IMAGE_STREAM_NAME}:${BASE_VERSION}-stable"
+                sh "oc -n 'bcgov' tag bcgov-tools/${IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${IMAGE_STREAM_NAME}:stable"
             }
         }
         stage('Acceptance') {
             agent { label 'deploy' }
             input {
-                message "Should we continue with cleanup?"
+                message "is this PR closed in GitHub?"
                 ok "Yes!"
             }
             steps {
-                echo "Cleaning ..."
-                sh ".jenkins/pipeline-cli cleanup --config=cicd/jenkins-slave-nodejs-10/openshift/config.groovy --pr=${CHANGE_ID}"
+                echo "Please accept/close PR via github UI for cleaning temporary objects"
             }
         }
     }
