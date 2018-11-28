@@ -47,7 +47,7 @@ pipeline {
         stage('Tag as stable') {
             agent { label 'deploy' }
             input {
-                message "Should we continue with tagging this image as ${env.BASE_VERSION}-stable?"
+                message "Should we continue with tagging this image as ${env.IMAGE_STREAM_NAME}/${env.BASE_VERSION}-stable?"
                 ok "Yes!"
             }
             steps {
