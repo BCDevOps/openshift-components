@@ -49,7 +49,7 @@ RUN wget https://pypi.python.org/packages/source/s/setuptools/setuptools-7.0.tar
     wget https://bootstrap.pypa.io/get-pip.py && \
     python get-pip.py
 
-RUN pip install --upgrade pip && \
+RUN pip install --upgrade --force-reinstall pip==9.0.3 && \
     pip install zapcli && \
     pip install python-owasp-zap-v2.4
 
