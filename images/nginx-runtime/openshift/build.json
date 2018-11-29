@@ -6,6 +6,32 @@
     "creationTimestamp": null
   },
   "objects": [
+      {
+        "apiVersion": "v1",
+        "kind": "ImageStream",
+        "metadata": {
+            "creationTimestamp": null,
+            "labels": {
+                "shared": "true"
+            },
+            "name": "nginx"
+        },
+        "spec": {
+            "lookupPolicy": {
+                "local": false
+            },
+            "tags": [
+                {
+                    "from": {
+                        "kind": "DockerImage",
+                        "name": "docker.io/library/nginx:1.15"
+                    },
+                    "importPolicy": {},
+                    "name": "1.15"
+                }
+            ]
+        }
+    },
     {
       "kind": "ImageStream",
       "apiVersion": "v1",
@@ -34,6 +60,12 @@
           "contextDir": "${SOURCE_CONTEXT_DIR}"
         },
         "strategy": {
+            "dockerStrategy": {
+              "from": {
+                  "kind": "ImageStreamTag",
+                  "name": "nginx:1.15"
+              }
+          },
           "type": "Docker"
         },
         "output": {
