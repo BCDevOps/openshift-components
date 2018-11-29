@@ -4,9 +4,9 @@ pipeline {
         disableResume()
     }
     environment {
-        BASE_VERSION = 'v10'
-        IMAGE_STREAM_NAME = 'jenkins-slave-nodejs-10'
-        SOURCE_DIR = 'cicd/jenkins-slave-nodejs-10'
+        BASE_VERSION = 'v8'
+        IMAGE_STREAM_NAME = 'jenkins-slave-nodejs-8'
+        SOURCE_DIR = 'cicd/jenkins-slave-nodejs-8'
     }
     stages {
         stage('Build') {

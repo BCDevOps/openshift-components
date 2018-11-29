@@ -2,7 +2,7 @@ apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   creationTimestamp: null
-  name: jenkins-slave-nodejs-10
+  name: jenkins-slave-nodejs-6
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -51,7 +51,7 @@ objects:
         memory: 1Gi
     runPolicy: SerialLatestOnly
     source:
-      contextDir: ${SOURCE_REPOSITORY_REF}
+      contextDir: ${SOURCE_CONTEXT_DIR}
       git:
         ref: ${SOURCE_REPOSITORY_REF}
         uri: ${SOURCE_REPOSITORY_URL}
@@ -72,7 +72,7 @@ parameters:
   displayName: Name
   name: NAME
   required: true
-  value: jenkins-slave-nodejs-10
+  value: jenkins-slave-nodejs-6
 - description: A name suffix used for all objects
   displayName: Suffix
   name: SUFFIX
@@ -82,13 +82,13 @@ parameters:
   displayName: version
   name: VERSION
   required: true
-  value: v3.10-10-latest
+  value: v6-latest
 - name: SOURCE_REPOSITORY_URL
   required: true
   value: https://github.com/BCDevOps/openshift-components.git
 - name: SOURCE_CONTEXT_DIR
   required: true
-  value: cicd/jenkins-slave-nodejs-10/docker
+  value: cicd/jenkins-slave-nodejs-6/docker
 - name: SOURCE_REPOSITORY_REF
   required: false
   value: master

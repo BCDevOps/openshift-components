@@ -1,5 +1,5 @@
 app {
-    name = "${opt.'name'?:'jenkins-slave-nodejs-10'}"
+    name = "${opt.'name'?:'jenkins-slave-nodejs-6'}"
     namespaces { //can't call environments :(
         'build'{
             namespace = 'bcgov-tools'
@@ -36,7 +36,7 @@ app {
         timeoutInSeconds = 60*20 // 20 minutes
         templates = [
                 [
-                    'file':'cicd/jenkins-slave-nodejs-10/openshift/build.yaml',
+                    'file':'cicd/jenkins-slave-nodejs-6/openshift/build.yaml',
                     'params':[
                         'NAME': app.build.name,
                         'SUFFIX': app.build.suffix,
