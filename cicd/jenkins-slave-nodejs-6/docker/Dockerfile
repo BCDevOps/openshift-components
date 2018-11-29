@@ -38,7 +38,7 @@ RUN yum repolist > /dev/null && \
 # Fetch stock nodejs and install
 RUN mkdir -p /opt && \
     pushd /opt && \
-    curl -s https://nodejs.org/dist/latest-v${NODE_MAJOR_VERSION}.x/node-${NODE_VERSION}-linux-x64.tar.xz | tar -Jx && \
+    curl -sL https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.xz | tar -Jx && \
     rm -f node-${NODE_VERSION}-linux-x64.tar.xz
 
 # Update environment variables

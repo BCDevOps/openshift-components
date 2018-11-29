@@ -51,7 +51,7 @@ objects:
         memory: 1Gi
     runPolicy: SerialLatestOnly
     source:
-      contextDir: ${SOURCE_REPOSITORY_REF}
+      contextDir: ${SOURCE_CONTEXT_DIR}
       git:
         ref: ${SOURCE_REPOSITORY_REF}
         uri: ${SOURCE_REPOSITORY_URL}
