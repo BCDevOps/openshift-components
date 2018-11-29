@@ -113,7 +113,7 @@
       "displayName": "Source Context Directory",
       "description": "The source context directory.",
       "required": true,
-      "value": "images/nginx-runtime/"
+      "value": "images/nginx-runtime/docker"
     },
     {
       "name": "OUTPUT_IMAGE_TAG",
