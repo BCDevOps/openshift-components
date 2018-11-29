@@ -38,7 +38,7 @@ app {
                 [
                     'file':'images/nginx-runtime/openshift/build.json',
                     'params':[
-                        'NAME': "${app.build.name}${app.build.suffix}",
+                        'NAME': app.build.name,
                         'OUTPUT_IMAGE_TAG': app.build.version,
                         'GIT_REPO_URL': "${app.git.uri}",
                         'GIT_REF': "${app.git.ref}"
