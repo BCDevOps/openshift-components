@@ -67,7 +67,7 @@
                     "type": "Docker",
                     "dockerStrategy": {
                         "noCache": false,
-                        "dockerfilePath": "Dockerfile.rhel",
+                        "dockerfilePath": "Dockerfile",
                         "from": {
                             "kind": "ImageStreamTag",
                             "name": "postgresql-96-rhel7:1-32"
