@@ -12,13 +12,22 @@ pipeline {
         stage('Build') {
             agent { label 'build' }
             steps {
+                script {
+                    def filesInThisCommitAsString = sh(script:"git diff --name-only HEAD~1..HEAD | grep '^${env.SOURCE_DIR}/' || echo -n ''", returnStatus: false, returnStdout: true).trim()
+                    def hasChangesInPath = (filesInThisCommitAsString.length() > 0)
+                    echo "${filesInThisCommitAsString}"
+                    if (!currentBuild.rawBuild.getCauses()[0].toString().contains('UserIdCause') && !hasChangesInPath){
+                        currentBuild.rawBuild.delete()
+                        error("No changes detected in the path ('^${env.SOURCE_DIR}/')")
+                    }
+                }
                 echo "Aborting all running jobs ..."
                 script {
                     abortAllPreviousBuildInProgress(currentBuild)
                 }
                 echo "BRANCH_NAME:${env.BRANCH_NAME}\nCHANGE_ID:${env.CHANGE_ID}\nCHANGE_TARGET:${env.CHANGE_TARGET}"
                 echo "Building ..."
-                sh ".pipeline/pipeline-cli build --pr=${CHANGE_ID} --config=${env.SOURCE_DIR}/openshift/config.groovy"
+                sh ".jenkins/pipeline-cli build --pr=${CHANGE_ID} --config=${env.SOURCE_DIR}/openshift/config.groovy"
             }
         }
         stage('Tag as latest') {
