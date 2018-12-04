@@ -1,0 +1,143 @@
+{
+    "kind": "Template",
+    "apiVersion": "v1",
+    "metadata": {
+      "name": "postgresql-96-rhel7",
+      "creationTimestamp": null
+    },
+    "objects": [
+        {
+            "apiVersion": "v1",
+            "kind": "ImageStream",
+            "metadata": {
+                "creationTimestamp": null,
+                "labels": {
+                    "shared": "true"
+                },
+                "name": "postgresql-96-rhel7"
+            },
+            "spec": {
+                "lookupPolicy": {
+                    "local": false
+                },
+                "tags": [
+                    {
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "registry.access.redhat.com/rhscl/postgresql-96-rhel7:1-32"
+                        },
+                        "importPolicy": {},
+                        "name": "1-32"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+              "name": "${NAME}",
+              "labels": {
+                "shared": "true"
+              }
+            }
+        },
+        {
+            "kind": "BuildConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${NAME}${SUFFIX}"
+            },
+            "spec": {
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    }
+                ],
+                "runPolicy": "Serial",
+                "source": {
+                    "type": "Git",
+                    "git": {
+                        "uri": "${GIT_REPO_URL}",
+                        "ref": "${GIT_REF}"
+                    },
+                    "contextDir": "${SOURCE_CONTEXT_DIR}"
+                },
+                "strategy": {
+                    "type": "Docker",
+                    "dockerStrategy": {
+                        "noCache": false,
+                        "dockerfilePath": "Dockerfile",
+                        "from": {
+                            "kind": "ImageStreamTag",
+                            "name": "postgresql-96-rhel7:1-32"
+                        }
+                    }
+                },
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "${NAME}:${OUTPUT_IMAGE_TAG}"
+                    }
+                },
+                "resources": {
+                    "requests":{
+                        "cpu": "1",
+                        "memory": "2Gi"
+                    },
+                    "limits":{
+                        "cpu": "2",
+                        "memory": "3Gi"
+                    }
+                },
+                "postCommit": {},
+                "nodeSelector": null,
+                "completionDeadlineSeconds": 1200,
+                "failedBuildsHistoryLimit": 2,
+                "successfulBuildsHistoryLimit": 5
+            }
+        }
+    ],
+    "parameters": [
+        {
+            "name": "NAME",
+            "displayName": "Name",
+            "description": "The name assigned to all objects.",
+            "required": true,
+            "value": "postgis-96"
+        },
+        {
+            "name": "SUFFIX",
+            "description": "A suffix appended to the name of all generated objects.",
+            "value": "-dev"
+        },
+        {
+            "name": "GIT_REPO_URL",
+            "displayName": "Git Repo URL",
+            "description": "The URL to your GIT repo, don't use the this default unless your just experimenting.",
+            "required": true,
+            "value": "https://github.com/BCDevOps/openshift-components.git"
+          },
+          {
+            "name": "GIT_REF",
+            "displayName": "Git Reference",
+            "description": "The git reference or branch.",
+            "required": true,
+            "value": "master"
+          },
+          {
+            "name": "SOURCE_CONTEXT_DIR",
+            "displayName": "Source Context Directory",
+            "description": "The source context directory.",
+            "required": true,
+            "value": "db/postgis/docker"
+          },
+          {
+            "name": "OUTPUT_IMAGE_TAG",
+            "displayName": "Output Image Tag",
+            "description": "The tag given to the built image.",
+            "required": true,
+            "value": "latest"
+          }
+    ]
+}
