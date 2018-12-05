@@ -31,7 +31,7 @@
         <source class="org.jenkinsci.plugins.github_branch_source.GitHubSCMSource" plugin="github-branch-source@2.3.6">
           <id>aead6315-e81f-4bed-aab3-3c0b7fc02c65</id>
           <credentialsId>github-account</credentialsId>
-          <repoOwner>bcgov</repoOwner>
+          <repoOwner>BCDevOps</repoOwner>
           <repository>s2i-caddy</repository>
           <traits>
             <org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait>
