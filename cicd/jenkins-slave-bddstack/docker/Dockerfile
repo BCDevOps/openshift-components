@@ -41,7 +41,7 @@ RUN yum repolist > /dev/null && \
     yum -y localinstall google-chrome-stable_current_x86_64.rpm && \
     rm google-chrome-stable_current_x86_64.rpm && \
     if [ ! -d /home/jenkins/.pki ] ; then mkdir /home/jenkins/.pki; fi && \
-    chmod 777 /home/jenkins/.pki
+    chmod -R 777 /home/jenkins/.pki
 
 # . /opt/rh/rh-nodejs6/enable
 ENV PATH=/opt/rh/rh-nodejs6/root/usr/bin${PATH:+:${PATH}} \
