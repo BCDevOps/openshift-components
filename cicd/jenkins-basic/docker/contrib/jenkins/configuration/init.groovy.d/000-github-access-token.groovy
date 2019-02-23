@@ -85,7 +85,7 @@ def createAccessToken = {
     //println "expires_at:\n${accessToken.get("expires_at")}"
     //expires_at
     //GitHub github = new GitHubBuilder().withOAuthToken(accessToken.get("token"), githubAppName).build();
-    ['oc','patch', "secret/${githubSecretName}", '-p', '{"stringData": {"password": "'+accessToken.get("token")+'", "token": "'+accessToken.get("token")+'", "expires_at":"'+accessToken.get("token")+'"}}', '-n', openshiftPodNamespace].execute().waitFor()
+    ['oc','patch', "secret/${githubSecretName}", '-p', '{"stringData": {"password": "'+accessToken.get("token")+'", "token": "'+accessToken.get("token")+'", "expires_at":"'+accessToken.get("expires_at")+'"}}', '-n', openshiftPodNamespace].execute().waitFor()
 
     return accessToken
 }
