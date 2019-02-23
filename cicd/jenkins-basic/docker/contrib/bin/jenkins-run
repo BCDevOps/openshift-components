@@ -94,7 +94,7 @@ echo "Running Jenkins System Installer(s)"
 [ -d "$JENKINS_HOME/install.groovy.d" ] && find $JENKINS_HOME/install.groovy.d/ -maxdepth 1 -type f -print0 | sort -z | xargs -t -r0 -I '{}' java -cp "${GROOVY_ALL_JAR}" groovy.lang.GroovyShell '{}' '{}'
 
 echo "Running Jenkins Job Installer(s)"
-[ -d "$JENKINS_HOME/jobs" ] && find $JENKINS_HOME/jobs/ -maxdepth 2  -type f -name '*.install.groovy' -print0 | sort -z | xargs -t -r0 -I '{}' java -cp "${GROOVY_ALL_JAR}" groovy.lang.GroovyShell '{}' '{}'
+[ -d "$JENKINS_HOME/jobs" ] && find $JENKINS_HOME/jobs/  -type f -name '*.install.groovy' -print0 | sort -z | xargs -t -r0 -I '{}' java -cp "${GROOVY_ALL_JAR}" groovy.lang.GroovyShell '{}' '{}'
 
 
 JAVA_CMD="$JENKINS_JAVA_CMD $JENKINS_JAVA_OPTIONS -Djenkins.install.runSetupWizard=false -DJENKINS_HOME=$JENKINS_HOME -jar $JENKINS_WAR"
