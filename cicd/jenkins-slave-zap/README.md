@@ -1,6 +1,14 @@
+---
+
+title: "OWASP ZAP Security Vulnerability Scanning"
+description: "The OWASP Zed Attack Proxy (ZAP) automatically finds security vulnerabilities in web applications."
+
+---
+
+
 # OWASP ZAP Security Vulnerability Scanning
 
-The OWASP Zed Attack Proxy (ZAP) automatically finds security vulnerabilities in our web applications.
+The OWASP Zed Attack Proxy (ZAP) automatically finds security vulnerabilities in web applications.
 
 The tool runs in the pipeline with several pre-packaged options:
 

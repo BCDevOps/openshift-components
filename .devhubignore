@@ -1,4 +1,4 @@
-apps/taiga/back
-apps/taiga/front
-apps/taiga/openshift
+apps/taiga
+apps/taiga
+apps/taiga
 cicd
