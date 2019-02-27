@@ -5,7 +5,7 @@ import org.kohsuke.github.*
 
 if ('prod'.equalsIgnoreCase(System.getenv('ENV_NAME'))){
     String jenkinsUrl = JenkinsLocationConfiguration.get().getUrl()
-    String genericWebHookTriggerToken = Jenkins.instance.getItem('ON_GH_EVENT').getTrigger(org.jenkinsci.plugins.gwt.GenericTrigger.class).getToken()
+    String genericWebHookTriggerToken = Jenkins.instance.getItemByFullName('_SYS/ON_GH_EVENT').getTrigger(org.jenkinsci.plugins.gwt.GenericTrigger.class).getToken()
 
     Jenkins.instance.getAllItems().each { job ->
         if (job instanceof jenkins.branch.MultiBranchProject){
