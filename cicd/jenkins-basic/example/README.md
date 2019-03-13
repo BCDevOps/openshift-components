@@ -3,7 +3,7 @@ In or der to use this base image, you will need to layer your project jenkins co
 We recommend that the Jenkins configuration is stored in a folder called `.jenkins` at the root of your repository.
 1. Create `.jenkins/docker/Dockerfile`
 
-    see example of this file in (docker/Dockerfile)[./docker/Dockerfile]
+    see example of this file in [docker/Dockerfile](./docker/Dockerfile)
 1. Add your project's job configuration. For example, if your project/repository is called `hello-world`, add `.jenkins/docker/contrib/jenkins/configuration/jobs/hello-world/config.xml`
     seet example of this file in docker/contrib/jenkins/configuration/jobs/hello-world/config.xml
     Make sure to update the following.
