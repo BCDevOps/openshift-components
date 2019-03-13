@@ -13,7 +13,7 @@ Provides a basic/lightweight installation of Jenkins
 ( cd "$(git rev-parse --show-toplevel)" && .jenkins/pipeline-cli deploy --config=cicd/jenkins-basic/openshift/config.groovy --pr=19 --env=prod )
 ```
 
-## Hot to use in your project
+## Hot to use it in your project
 In or der to use this base image, you will need to layer your project jenkins configurations.
 We recommend that the Jenkins configuration is stored in a folder called `.jenkins` at the root of your repository.
 1. Create `.jenkins/docker/Dockerfile`
