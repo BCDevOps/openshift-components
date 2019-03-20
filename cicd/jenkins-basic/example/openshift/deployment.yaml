@@ -3,7 +3,6 @@ kind: Template
 metadata:
   creationTimestamp: null
   name: jenkins
-  namespace: default
 objects:
 - apiVersion: v1
   kind: ImageStream
