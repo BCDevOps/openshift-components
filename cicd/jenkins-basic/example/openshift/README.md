@@ -1,1 +1,1 @@
-# Manually build/deploy usin oc
+# Manually build/deploy using oc
