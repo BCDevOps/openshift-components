@@ -23,6 +23,8 @@ objects:
     name: ${NAME}${SUFFIX}-slave-user
   stringData:
     metadata.name: ""
+    username: ""
+    password: ""
   type: kubernetes.io/basic-auth
 - apiVersion: v1
   kind: Secret
@@ -32,6 +34,8 @@ objects:
     name: ${NAME}${SUFFIX}-github
   stringData:
     metadata.name: ""
+    username: ""
+    password: ""
   type: kubernetes.io/basic-auth
 - apiVersion: v1
   kind: PersistentVolumeClaim
