@@ -14,29 +14,29 @@ objects:
   spec:
     lookupPolicy:
       local: false
-- apiVersion: v1
-  kind: Secret
-  metadata:
-    annotations:
-      as-copy-of: template.${NAME}-slave-user
-      as-copy-of/preserve: password
-    name: ${NAME}${SUFFIX}-slave-user
-  stringData:
-    metadata.name: ""
-    username: ""
-    password: ""
-  type: kubernetes.io/basic-auth
-- apiVersion: v1
-  kind: Secret
-  metadata:
-    annotations:
-      as-copy-of: template.${NAME}-github
-    name: ${NAME}${SUFFIX}-github
-  stringData:
-    metadata.name: ""
-    username: ""
-    password: ""
-  type: kubernetes.io/basic-auth
+# - apiVersion: v1
+#   kind: Secret
+#   metadata:
+#     annotations:
+#       as-copy-of: template.${NAME}-slave-user
+#       as-copy-of/preserve: password
+#     name: ${NAME}${SUFFIX}-slave-user
+#   stringData:
+#     metadata.name: ""
+#     username: ""
+#     password: ""
+#   type: kubernetes.io/basic-auth
+# - apiVersion: v1
+#   kind: Secret
+#   metadata:
+#     annotations:
+#       as-copy-of: template.${NAME}-github
+#     name: ${NAME}${SUFFIX}-github
+#   stringData:
+#     metadata.name: ""
+#     username: ""
+#     password: ""
+#   type: kubernetes.io/basic-auth
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
