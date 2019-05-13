@@ -2,33 +2,16 @@ apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   creationTimestamp: null
-  name: jenkins-basic
+  name: jenkins
+  namespace: default
 objects:
 - apiVersion: v1
   kind: ImageStream
   metadata:
     creationTimestamp: null
-    name: rhel-atomic
     labels:
-        shared: 'true'
-  spec:
-    lookupPolicy:
-      local: false
-    tags:
-    - annotations:
-        openshift.io/imported-from: registry.access.redhat.com/rhel-atomic:7.5-408
-      from:
-        kind: DockerImage
-        name: registry.access.redhat.com/rhel-atomic:7.5-408
-      importPolicy: {}
-      name: '7.5-408'
-- apiVersion: v1
-  kind: ImageStream
-  metadata:
-    creationTimestamp: null
+      shared: "true"
     name: ${NAME}
-    labels:
-        shared: 'true'
   spec:
     lookupPolicy:
       local: false
@@ -46,14 +29,14 @@ objects:
     postCommit: {}
     resources:
       limits:
-        cpu: "2"
-        memory: 2Gi
+        cpu: "1"
+        memory: 1Gi
       requests:
         cpu: "1"
         memory: 1Gi
     runPolicy: SerialLatestOnly
     source:
-      contextDir: cicd/jenkins-basic/docker
+      contextDir: .jenkins/docker
       git:
         ref: ${SOURCE_REPOSITORY_REF}
         uri: ${SOURCE_REPOSITORY_URL}
@@ -62,7 +45,8 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: rhel-atomic:7.5-408
+          name: ${SOURCE_IMAGE_STREAM_TAG}
+          namespace: ${SOURCE_IMAGE_STREAM_NAMESPACE}
       type: Docker
     successfulBuildsHistoryLimit: 2
     triggers:
@@ -74,7 +58,7 @@ parameters:
   displayName: Name
   name: NAME
   required: true
-  value: jenkins-basic
+  value: jenkins
 - description: A name suffix used for all objects
   displayName: Suffix
   name: SUFFIX
@@ -84,10 +68,14 @@ parameters:
   displayName: version
   name: VERSION
   required: true
-  value: v2-latest
+  value: v1.0.0
+- name: SOURCE_IMAGE_STREAM_NAMESPACE
+  required: true
+  value: bcgov
+- name: SOURCE_IMAGE_STREAM_TAG
+  required: true
+  value: jenkins-basic:v2-latest
 - name: SOURCE_REPOSITORY_URL
   required: true
-  value: https://github.com/BCDevOps/openshift-components.git
 - name: SOURCE_REPOSITORY_REF
-  required: false
-  value: master
+  required: true

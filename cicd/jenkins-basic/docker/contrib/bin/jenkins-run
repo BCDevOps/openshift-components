@@ -86,13 +86,15 @@ unzip -qo $JENKINS_WAR -d $JENKINS_WEBROOT_DIR
 #https://unix.stackexchange.com/questions/34325/sorting-the-output-of-find
 
 echo "Running Jenkins System Installer(s)"
-[ -d "$JENKINS_HOME/install.d" ] && find $JENKINS_HOME/install.d/ -maxdepth 1 -type f -print0 | sort -z | xargs -r0 -I '{}' bash '{}'
+[ -d "$JENKINS_HOME/install.d" ] && find $JENKINS_HOME/install.d/ -maxdepth 1 -type f -print0 | sort -z | xargs -t -r0 -I '{}' bash '{}'
+
+GROOVY_ALL_JAR="$(find /var/cache/jenkins/war--daemon/WEB-INF/lib/ -name '*groovy-all*.jar' -print0)"
 
 echo "Running Jenkins System Installer(s)"
-[ -d "$JENKINS_HOME/install.groovy.d" ] && find $JENKINS_HOME/install.groovy.d/ -maxdepth 1 -type f -print0 | sort -z | xargs -r0 -I '{}' java -cp /var/cache/jenkins/war--daemon/WEB-INF/lib/groovy-all-2.4.11.jar groovy.lang.GroovyShell '{}' '{}'
+[ -d "$JENKINS_HOME/install.groovy.d" ] && find $JENKINS_HOME/install.groovy.d/ -maxdepth 1 -type f -print0 | sort -z | xargs -t -r0 -I '{}' java -cp "${GROOVY_ALL_JAR}" groovy.lang.GroovyShell '{}' '{}'
 
 echo "Running Jenkins Job Installer(s)"
-[ -d "$JENKINS_HOME/jobs" ] && find $JENKINS_HOME/jobs/ -maxdepth 2  -type f -name '*.install.groovy' -print0 | sort -z | xargs -r0 -I '{}' java -cp /var/cache/jenkins/war--daemon/WEB-INF/lib/groovy-all-2.4.11.jar groovy.lang.GroovyShell '{}' '{}'
+[ -d "$JENKINS_HOME/jobs" ] && find $JENKINS_HOME/jobs/  -type f -name '*.install.groovy' -print0 | sort -z | xargs -t -r0 -I '{}' java -cp "${GROOVY_ALL_JAR}" groovy.lang.GroovyShell '{}' '{}'
 
 
 JAVA_CMD="$JENKINS_JAVA_CMD $JENKINS_JAVA_OPTIONS -Djenkins.install.runSetupWizard=false -DJENKINS_HOME=$JENKINS_HOME -jar $JENKINS_WAR"

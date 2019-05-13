@@ -40,7 +40,6 @@ pipeline {
                 echo "Tagging ${env.IMAGE_STREAM_NAME}:${env.BASE_VERSION}-latest and ${env.IMAGE_STREAM_NAME}:latest"
                 sh "oc -n 'bcgov-tools' tag ${env.IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${env.IMAGE_STREAM_NAME}:${env.BASE_VERSION}-latest"
                 sh "oc -n 'bcgov' tag bcgov-tools/${env.IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${env.IMAGE_STREAM_NAME}:${env.BASE_VERSION}-latest"
-                sh "oc -n 'bcgov' tag bcgov-tools/${env.IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${env.IMAGE_STREAM_NAME}:latest"
             }
         }
 
@@ -53,7 +52,6 @@ pipeline {
             steps {
                 echo "Tagging ${env.IMAGE_STREAM_NAME}:${env.BASE_VERSION}-stable and ${env.IMAGE_STREAM_NAME}:stable"
                 sh "oc -n 'bcgov' tag bcgov-tools/${env.IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${env.IMAGE_STREAM_NAME}:${env.BASE_VERSION}-stable"
-                sh "oc -n 'bcgov' tag bcgov-tools/${env.IMAGE_STREAM_NAME}:build-v${CHANGE_ID} ${env.IMAGE_STREAM_NAME}:stable"
             }
         }
 
