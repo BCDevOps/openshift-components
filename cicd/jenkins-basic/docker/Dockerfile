@@ -1,7 +1,7 @@
 FROM registry.access.redhat.com/rhel7/rhel-atomic
 
 # https://blog.csanchez.org/2017/05/31/running-a-jvm-in-a-container-without-getting-killed/
-ENV JENKINS_VERSION=2.164.3 \
+ENV JENKINS_VERSION=2.176.1 \
     HOME=/var/lib/jenkins \
     JENKINS_REF_HOME=/opt/jenkins \
     JENKINS_HOME=/var/lib/jenkins \
