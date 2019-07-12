@@ -2,6 +2,7 @@
 <hudson>
   <disabledAdministrativeMonitors>
     <string>GitHubHookRegisterProblemMonitor</string>
+    <string>jenkins.security.QueueItemAuthenticatorMonitor</string>
   </disabledAdministrativeMonitors>
   <version>2.121.2</version>
   <installStateName>RUNNING</installStateName>
