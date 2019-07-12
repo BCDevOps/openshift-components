@@ -93,3 +93,8 @@ We recommend that the Jenkins configuration is stored in a folder called `.jenki
     3. `<scriptPath>Jenkinsfile</scriptPath>`
     
     
+## Copy update configuration files from a pod
+```
+oc -n agri-nmp-tools rsync jenkins-agri-nmp-dev-393-3-srhrb:/var/lib/jenkins/ $(git rev-parse --show-toplevel)/cicd/jenkins-basic/docker/contrib/jenkins/configuration --no-perms=true --exclude=.pki --exclude=.gnupg --exclude=jobs  --exclude=init.groovy.d --exclude=install.groovy.d --exclude=plugins --exclude=scripts.groovy.d --exclude=secrets  --exclude=.kube  --exclude=.cache --exclude=.java --exclude=monitoring  --exclude=users  --exclude=.groovy  --exclude=nodes --exclude=workflow-libs --exclude=logs --exclude=userContent --exclude=updates --exclude=builds --exclude=secret.key --exclude=secret.key.not-so-secret --exclude=credentials.xml --exclude=identity.key.enc  --exclude=jenkins.install.InstallUtil.lastExecVersion --exclude=queue.xml --exclude=.lastStarted --exclude=jenkins.model.JenkinsLocationConfiguration.xml
+
+```
