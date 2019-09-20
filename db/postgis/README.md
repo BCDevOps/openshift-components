@@ -2,7 +2,7 @@
 
 description: A PostgreSQL Docker image that includes PostGIS and dependencies needed to support GDAL.
 title: PostGIS
-image: https://commons.wikimedia.org/wiki/File:Logo_square_postgis.png
+image: https://upload.wikimedia.org/wikipedia/en/6/60/PostGIS_logo.png
 ---
 
 ## PostGIS
