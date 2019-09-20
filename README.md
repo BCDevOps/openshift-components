@@ -22,11 +22,11 @@ In its current form, this repo is a central place for the DevOps team to collect
 
 This folder contains artifacts for useful team "support applications". These are things that team would generally install and use, rather than using as the basis of custom development. 
 
-__Taiga__
+[__Taiga__](./apps/taiga)
 
 Taiga is a user-friendly Agile project management and collaboration tool with functionality somewhere between Trello and Jira. The assets provided [here](apps/taiga) enable a team to deploy their own Taiga instance within an OpenShift project space. 
 
-## cicd
+## [cicd](./cicd)
 
 Docker files to build Jenkins builder images
 
@@ -63,7 +63,7 @@ __Sonar__
 
 __Zap__
 
-## db
+## [db](./db)
 
 Docker files to build data storage images
 
