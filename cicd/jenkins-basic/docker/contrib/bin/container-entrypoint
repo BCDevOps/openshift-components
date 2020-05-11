@@ -1,2 +1,28 @@
 #!/bin/bash
+
+# Create folder structure for storing peristent data and their respective symlink to jenkins home directory
+# Folder: jobs, logs, builds
+
+set -o pipefail
+
+echo "Preparing persistent folder structure"
+
+#rm -rf $JENKINS_HOME/jobs
+#rm -rf $JENKINS_HOME/logs
+#rm -rf $JENKINS_HOME/builds
+
+mkdir -p /var/jenkins-data/jobs
+mkdir -p /var/jenkins-data/logs
+mkdir -p /var/jenkins-data/builds
+
+
+ln -sf /var/jenkins-data/jobs $JENKINS_HOME/jobs
+ln -sf /var/jenkins-data/logs $JENKINS_HOME/logs
+ln -sf /var/jenkins-data/builds $JENKINS_HOME/builds
+
+# workaround! jenkins-run is missing --keep-dirlinks
+rsync -av --no-o --no-g --no-perms --keep-dirlinks --no-acls --no-xattrs --no-super --omit-dir-times $JENKINS_REF_HOME/jobs/ $JENKINS_HOME/jobs/
+
+rm -rf $JENKINS_REF_HOME/jobs
+
 exec "$@"
