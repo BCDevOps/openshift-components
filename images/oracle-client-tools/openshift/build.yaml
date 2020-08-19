@@ -1,0 +1,81 @@
+apiVersion: v1
+objects:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      shared: "true"
+    name: ubi-minimal
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: registry.access.redhat.com/ubi7/ubi-minimal:7.7-98
+      from:
+        kind: DockerImage
+        name: registry.access.redhat.com/ubi7/ubi-minimal:7.7-98
+      generation: null
+      importPolicy: {}
+      name: "7.7-98"
+      referencePolicy:
+        type: "Local"
+  status:
+    dockerImageRepository: ""
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+    creationTimestamp: null
+    labels:
+      build: oracle-client-tools
+    name: oracle-client-tools
+  spec:
+    lookupPolicy:
+      local: false
+  status:
+    dockerImageRepository: ""
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+    creationTimestamp: null
+    labels:
+      build: oracle-client-tools
+    name: oracle-client-tools
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: oracle-client-tools:latest
+    postCommit: {}
+    resources:
+      requests:
+        cpu: 1
+      limits:
+        cpu: 2
+    source:
+      contextDir: images/oracle-client-tools/docker
+      git:
+        ref: oracle-client-tools
+        uri: https://github.com/BCDevOps/openshift-components.git
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: ubi-minimal:7.7-98
+        imageOptimizationPolicy: SkipLayers
+      type: Docker
+    triggers:
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+  status:
+    lastVersion: 0
+kind: Template
+metadata: {}
