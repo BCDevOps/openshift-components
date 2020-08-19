@@ -5,6 +5,7 @@ ENV JENKINS_VERSION=2.235.5 \
     HOME=/var/lib/jenkins \
     JENKINS_REF_HOME=/opt/jenkins \
     JENKINS_HOME=/var/lib/jenkins \
+    JENKINS_DATA=/var/jenkins-data \
     JENKINS_UC=https://updates.jenkins.io \
     OPENSHIFT_JENKINS_IMAGE_VERSION=3.11 \
     LANG=en_US.UTF-8 \
@@ -19,7 +20,7 @@ ARG SWARM_CLIENT_VERSION=3.15
 
 RUN set -x && microdnf -h && \
     curl -so /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo && \
-    rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key && \
+    rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key && \
     microdnf --enablerepo=rhel-7-server-rpms --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=jenkins install which gpg java-1.8.0-openjdk-devel shadow-utils "jenkins-$JENKINS_VERSION" zip unzip bzip2 rsync elfutils rh-git29 --nodocs && \
     microdnf clean all && \
     echo "unset BASH_ENV PROMPT_COMMAND ENV" > /usr/local/bin/scl_enable && \
@@ -109,6 +110,8 @@ RUN set -x && \
     chmod -R 644 $JENKINS_REF_HOME && \
     chmod -R g+rwX $JENKINS_REF_HOME && \
     (export REF=$JENKINS_REF_HOME/plugins; /usr/local/bin/jenkins-install-plugins $JENKINS_REF_HOME/plugins.txt)
+
+VOLUME ["${JENKINS_DATA}"]
 
 USER 1001
 
