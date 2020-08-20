@@ -17,7 +17,7 @@ credentials:2.3.12
 durable-task:1.34
 generic-webhook-trigger:1.67
 github-api:1.115
-groovy-events-listener-plugin:1.017
+groovy-events-listener-plugin:1.014
 handlebars:1.1.1
 handy-uri-templates-2-api:2.1.8-1.0
 jquery-detached:1.2.1
