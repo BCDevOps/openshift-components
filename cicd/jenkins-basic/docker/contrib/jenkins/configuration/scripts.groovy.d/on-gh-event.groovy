@@ -52,11 +52,14 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                 def payload = new JsonSlurper().parseText(ghPayload)
                 if ("closed" == payload.action){
                     File gitWorkDir = workDir
-                    def ghRepo=com.cloudbees.jenkins.GitHubRepositoryName.create(payload.repository.clone_url).resolveOne()
-                    boolean isFromCollaborator=ghRepo.root.retrieve().asHttpStatusCode(ghRepo.getApiTailUrl("collaborators/${payload.pull_request.user.login}")) == 204
                     String cloneUrl = payload.repository.clone_url
+                    def ghPrUser = payload.pull_request.user.login
+                    def ghRepo=com.cloudbees.jenkins.GitHubRepositoryName.create(cloneUrl).resolveOne()
+                    def ghPrUserPermission = ghRepo.getPermission(ghPrUser)
+                    boolean isFromCollaborator = ghPrUserPermission == org.kohsuke.github.GHPermissionType.WRITE || ghPrUserPermission == org.kohsuke.github.GHPermissionType.ADMIN
+                    
                     String sourceBranch = isFromCollaborator?"refs/pull/${payload.number}/head":"refs/heads/${payload.pull_request.base.ref}"
-                    println "Is Collaborator:${isFromCollaborator} (${payload.pull_request.user.login})"
+                    println "Is Collaborator:${isFromCollaborator} (${ghPrUser})"
                     println "Clone Url:${cloneUrl}"
                     println "Checkout Branch:${sourceBranch}"
 
