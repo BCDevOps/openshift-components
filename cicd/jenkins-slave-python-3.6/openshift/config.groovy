@@ -1,5 +1,5 @@
 app {
-    name = "${opt.'name'?:'jenkins-slave-python-36'}"
+    name = "${opt.'name'?:'jenkins-slave-python-3.6'}"
     namespaces { //can't call environments :(
         'build'{
             namespace = 'bcgov-tools'
