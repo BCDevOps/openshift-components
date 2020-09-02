@@ -28,7 +28,7 @@ ARG SWARM_CLIENT_VERSION=3.15
 #     chmod -R g+rx /usr/local/bin && \
 #     microdnf clean all && \
 #     rpm -qa
-
+RUN yum install tar
 # When bash is started non-interactively, to run a shell script, for example it
 # looks for this variable and source the content of this file. This will enable
 # the SCL for all scripts without need to do 'scl enable'.
