@@ -1,4 +1,4 @@
-FROM registry.redhat.io/openshift3/jenkins-2-rhel7:latest
+FROM registry.access.redhat.com/rhel7/rhel-atomic
 
 # https://blog.csanchez.org/2017/05/31/running-a-jvm-in-a-container-without-getting-killed/
 ENV JENKINS_VERSION=2.235.5 \
@@ -17,18 +17,18 @@ ARG TINI_VERSION=v0.18.0
 ARG TINI_QUALIFIER=amd64
 ARG SWARM_CLIENT_VERSION=3.15
 
-# RUN set -x && microdnf -h && \
-#     curl -so /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo && \
-#     rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key && \
-#     microdnf --enablerepo=rhel-7-server-rpms --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=jenkins install which gpg java-1.8.0-openjdk-devel shadow-utils "jenkins-$JENKINS_VERSION" zip unzip bzip2 rsync elfutils rh-git29 --nodocs && \
-#     microdnf clean all && \
-#     echo "unset BASH_ENV PROMPT_COMMAND ENV" > /usr/local/bin/scl_enable && \
-#     echo "source scl_source enable rh-git29" >> /usr/local/bin/scl_enable && \
-#     chgrp -R 0 /usr/local/bin && \
-#     chmod -R g+rx /usr/local/bin && \
-#     microdnf clean all && \
-#     rpm -qa
-RUN yum install tar
+RUN set -x && microdnf -h && \
+    curl -so /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo && \
+    rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key && \
+    microdnf --enablerepo=rhel-7-server-rpms --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=jenkins install which gpg java-1.8.0-openjdk-devel shadow-utils "jenkins-$JENKINS_VERSION" zip unzip bzip2 rsync elfutils rh-git29 --nodocs && \
+    microdnf clean all && \
+    echo "unset BASH_ENV PROMPT_COMMAND ENV" > /usr/local/bin/scl_enable && \
+    echo "source scl_source enable rh-git29" >> /usr/local/bin/scl_enable && \
+    chgrp -R 0 /usr/local/bin && \
+    chmod -R g+rx /usr/local/bin && \
+    microdnf clean all && \
+    rpm -qa
+
 # When bash is started non-interactively, to run a shell script, for example it
 # looks for this variable and source the content of this file. This will enable
 # the SCL for all scripts without need to do 'scl enable'.
