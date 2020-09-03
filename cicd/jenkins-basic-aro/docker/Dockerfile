@@ -29,7 +29,7 @@ RUN set -x && \
     chmod +x /usr/local/bin/dumb-init
 
 RUN set -x && \
-    curl -sLo /usr/lib/jenkins/swarm-client.jar https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/${SWARM_CLIENT_VERSION}/swarm-client-${SWARM_CLIENT_VERSION}.jar && \
+    curl -sLo /usr/lib/jenkins/swarm-client.jar https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.22/swarm-client-3.22.jar && \
     chmod 644 /usr/lib/jenkins/swarm-client.jar
 
 RUN set -x && \
