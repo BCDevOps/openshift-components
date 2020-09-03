@@ -10,7 +10,7 @@ ENV HOME=/var/lib/jenkins \
     LC_ALL=en_US.UTF-8
 
 ARG JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2"
-ARG SWARM_CLIENT_VERSION=3.15
+ARG SWARM_CLIENT_VERSION=3.22
 
 # When bash is started non-interactively, to run a shell script, for example it
 # looks for this variable and source the content of this file. This will enable
