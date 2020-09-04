@@ -1,7 +1,6 @@
 jquery3-api:3.5.1-1
 plugin-util-api:1.2.2
 snakeyaml-api:1.26.4
-trilead-api:1.0.8
 display-url-api:2.3.3
 durable-task:1.34
 jackson2-api:2.11.2
