@@ -7,6 +7,7 @@ ENV JENKINS_VERSION=2.235.5 \
     JENKINS_HOME=/var/lib/jenkins \
     JENKINS_DATA=/var/jenkins-data \
     JENKINS_UC=https://updates.jenkins.io \
+    JENKINS_UC_DOWNLOAD=https://ftp-nyc.osuosl.org/pub/jenkins/ \
     OPENSHIFT_JENKINS_IMAGE_VERSION=3.11 \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
