@@ -22,7 +22,7 @@ RUN set -x && microdnf -h && \
     curl -so /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo && \
     rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key && \
     # microdnf --disableplugin=subscription-manager --enablerepo=rhel-7-server-rpms --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=jenkins install which gpg java-1.8.0-openjdk-devel shadow-utils "jenkins-$JENKINS_VERSION" zip unzip bzip2 rsync elfutils rh-git29 --nodocs && \
-    microdnf --disableplugin=subscription-manager --enablerepo=jenkins install which gpg java-1.8.0-openjdk-devel shadow-utils "jenkins-$JENKINS_VERSION" zip unzip bzip2 rsync elfutils rh-git29 --nodocs && \
+    microdnf --enablerepo=jenkins install which gpg java-1.8.0-openjdk-devel shadow-utils "jenkins-$JENKINS_VERSION" zip unzip bzip2 rsync elfutils rh-git29 --nodocs && \
     microdnf clean all && \
     echo "unset BASH_ENV PROMPT_COMMAND ENV" > /usr/local/bin/scl_enable && \
     echo "source scl_source enable rh-git29" >> /usr/local/bin/scl_enable && \
