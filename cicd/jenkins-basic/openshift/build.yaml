@@ -44,7 +44,7 @@ objects:
       dockerStrategy:
         from:
           kind: DockerImage
-          name: registry.redhat.io/ubi8/ubi-minimal:latest
+          name: registry.redhat.io/ubi8/ubi:8.2
       type: Docker
     successfulBuildsHistoryLimit: 2
     triggers:
