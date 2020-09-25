@@ -19,10 +19,9 @@ ARG TINI_QUALIFIER=amd64
 ARG SWARM_CLIENT_VERSION=3.15
 
 RUN set -x && yum -h && \
-    yum repolist \
     curl -so /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo && \
     rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key && \
-    yum --disableplugin=subscription-manager --enablerepo=rhel-7-server-optional-rpms -enablerepo=rhel-server-rhscl-7-rpms --enablerepo=jenkins install which gpg java-1.8.0-openjdk-devel shadow-utils "jenkins-$JENKINS_VERSION" zip unzip bzip2 rsync elfutils rh-git218 --nodocs && \
+    yum -y --disableplugin=subscription-manager --enablerepo=ubi-8-appstream --enablerepo=jenkins install which gpg java-1.8.0-openjdk-devel shadow-utils "jenkins-$JENKINS_VERSION" zip unzip bzip2 rsync elfutils git-2.18.4-2.el8_2.x86_64 --nodocs && \
     yum clean all && \
     echo "unset BASH_ENV PROMPT_COMMAND ENV" > /usr/local/bin/scl_enable && \
     echo "source scl_source enable rh-git29" >> /usr/local/bin/scl_enable && \
@@ -41,8 +40,8 @@ ENV BASH_ENV=/usr/local/bin/scl_enable \
 #OC command line
 RUN set -x && \
     mkdir /tmp/oc && \
-    curl -fsSL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.5.11.tar.gz -o /tmp/oc/openshift-origin-client-tools.tar.gz && \
-    tar -xzf /tmp/oc/openshift-origin-client-tools.tar.gz -C /tmp/oc  --strip-components=1 && \
+    curl -SL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.5.11.tar.gz -o /tmp/oc/openshift-origin-client-tools.tar.gz && \
+    tar -xzf /tmp/oc/openshift-origin-client-tools.tar.gz -C /tmp/oc && \
     cp /tmp/oc/oc /usr/local/bin/ && \
     chmod +x /usr/local/bin/oc && \
     rm -rf /tmp/oc
