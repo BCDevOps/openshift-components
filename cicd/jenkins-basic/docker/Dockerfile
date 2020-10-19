@@ -16,7 +16,7 @@ ARG OC_VERSION=v3.11.0
 ARG OC_QUALIFIER=0cbc58b-linux-64bit
 ARG TINI_VERSION=v0.18.0
 ARG TINI_QUALIFIER=amd64
-ARG SWARM_CLIENT_VERSION=3.15
+ARG SWARM_CLIENT_VERSION=3.23
 
 RUN set -x && yum -h && \
     curl -so /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo && \
@@ -114,4 +114,3 @@ RUN set -x && \
 VOLUME ["${JENKINS_DATA}"]
 
 USER 1001
-
