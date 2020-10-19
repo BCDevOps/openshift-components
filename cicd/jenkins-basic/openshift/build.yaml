@@ -8,24 +8,6 @@ objects:
   kind: ImageStream
   metadata:
     creationTimestamp: null
-    name: rhel-atomic
-    labels:
-        shared: 'true'
-  spec:
-    lookupPolicy:
-      local: false
-    tags:
-    - annotations:
-        openshift.io/imported-from: registry.access.redhat.com/rhel-atomic:7.5-408
-      from:
-        kind: DockerImage
-        name: registry.access.redhat.com/rhel-atomic:7.5-408
-      importPolicy: {}
-      name: '7.5-408'
-- apiVersion: v1
-  kind: ImageStream
-  metadata:
-    creationTimestamp: null
     name: ${NAME}
     labels:
         shared: 'true'
@@ -61,8 +43,8 @@ objects:
     strategy:
       dockerStrategy:
         from:
-          kind: ImageStreamTag
-          name: rhel-atomic:7.5-408
+          kind: DockerImage
+          name: registry.redhat.io/ubi8/ubi:8.2
       type: Docker
     successfulBuildsHistoryLimit: 2
     triggers:

@@ -74,9 +74,17 @@ echo "JENKINS_JAVA_OPTIONS=${JENKINS_JAVA_OPTIONS}"
 
 
 #"${JENKINS_JAVA_CMD}" $JENKINS_JAVA_OPTIONS -XshowSettings:vm -version
+echo "Preparing persistent folder structure"
+mkdir -p $JENKINS_DATA/jobs
+mkdir -p $JENKINS_DATA/logs
+mkdir -p $JENKINS_DATA/builds
+
+ln -sf $JENKINS_DATA/jobs $JENKINS_HOME/jobs
+ln -sf $JENKINS_DATA/logs $JENKINS_HOME/logs
+ln -sf $JENKINS_DATA/builds $JENKINS_HOME/builds
 
 #Copy all configuration files to JENKINS_HOME
-rsync -av --no-o --no-g --no-perms --no-acls --no-xattrs --no-super --omit-dir-times $JENKINS_REF_HOME/ $JENKINS_HOME/
+rsync -av --no-o --no-g --no-perms --keep-dirlinks --no-acls --no-xattrs --no-super --omit-dir-times $JENKINS_REF_HOME/ $JENKINS_HOME/
 
 export JENKINS_WEBROOT_DIR='/var/cache/jenkins/war--daemon'
 

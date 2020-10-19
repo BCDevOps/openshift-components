@@ -1,10 +1,11 @@
-FROM registry.access.redhat.com/rhel7/rhel-atomic
+FROM registry.redhat.io/ubi8/ubi:8.2
 
 # https://blog.csanchez.org/2017/05/31/running-a-jvm-in-a-container-without-getting-killed/
-ENV JENKINS_VERSION=2.176.1 \
+ENV JENKINS_VERSION=2.235.5 \
     HOME=/var/lib/jenkins \
     JENKINS_REF_HOME=/opt/jenkins \
     JENKINS_HOME=/var/lib/jenkins \
+    JENKINS_DATA=/var/jenkins-data \
     JENKINS_UC=https://updates.jenkins.io \
     OPENSHIFT_JENKINS_IMAGE_VERSION=3.11 \
     LANG=en_US.UTF-8 \
@@ -15,18 +16,18 @@ ARG OC_VERSION=v3.11.0
 ARG OC_QUALIFIER=0cbc58b-linux-64bit
 ARG TINI_VERSION=v0.18.0
 ARG TINI_QUALIFIER=amd64
-ARG SWARM_CLIENT_VERSION=3.15
+ARG SWARM_CLIENT_VERSION=3.23
 
-RUN set -x && microdnf -h && \
+RUN set -x && yum -h && \
     curl -so /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo && \
-    rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key && \
-    microdnf --enablerepo=rhel-7-server-rpms --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=jenkins install which gpg java-1.8.0-openjdk-devel shadow-utils "jenkins-$JENKINS_VERSION" zip unzip bzip2 rsync elfutils rh-git29 --nodocs && \
-    microdnf clean all && \
+    rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key && \
+    yum -y --disableplugin=subscription-manager --enablerepo=ubi-8-appstream --enablerepo=jenkins install which gpg java-1.8.0-openjdk-devel shadow-utils "jenkins-$JENKINS_VERSION" zip unzip bzip2 rsync elfutils git-2.18.4-2.el8_2.x86_64 --nodocs && \
+    yum clean all && \
     echo "unset BASH_ENV PROMPT_COMMAND ENV" > /usr/local/bin/scl_enable && \
     echo "source scl_source enable rh-git29" >> /usr/local/bin/scl_enable && \
     chgrp -R 0 /usr/local/bin && \
     chmod -R g+rx /usr/local/bin && \
-    microdnf clean all && \
+    yum clean all && \
     rpm -qa
 
 # When bash is started non-interactively, to run a shell script, for example it
@@ -39,8 +40,8 @@ ENV BASH_ENV=/usr/local/bin/scl_enable \
 #OC command line
 RUN set -x && \
     mkdir /tmp/oc && \
-    curl -fsSL https://github.com/openshift/origin/releases/download/${OC_VERSION}/openshift-origin-client-tools-${OC_VERSION}-${OC_QUALIFIER}.tar.gz -o /tmp/oc/openshift-origin-client-tools.tar.gz && \
-    tar -xzf /tmp/oc/openshift-origin-client-tools.tar.gz -C /tmp/oc  --strip-components=1 && \
+    curl -SL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.5.11.tar.gz -o /tmp/oc/openshift-origin-client-tools.tar.gz && \
+    tar -xzf /tmp/oc/openshift-origin-client-tools.tar.gz -C /tmp/oc && \
     cp /tmp/oc/oc /usr/local/bin/ && \
     chmod +x /usr/local/bin/oc && \
     rm -rf /tmp/oc
@@ -110,5 +111,6 @@ RUN set -x && \
     chmod -R g+rwX $JENKINS_REF_HOME && \
     (export REF=$JENKINS_REF_HOME/plugins; /usr/local/bin/jenkins-install-plugins $JENKINS_REF_HOME/plugins.txt)
 
-USER 1001
+VOLUME ["${JENKINS_DATA}"]
 
+USER 1001

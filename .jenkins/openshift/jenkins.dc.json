@@ -132,13 +132,10 @@
             "kind": "PersistentVolumeClaim",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}${SUFFIX}",
-                "annotations": {
-                    "volume.beta.kubernetes.io/storage-class": "gluster-file",
-                    "volume.beta.kubernetes.io/storage-provisioner": "kubernetes.io/glusterfs"
-                }
+                "name": "${NAME}${SUFFIX}"
             },
             "spec": {
+                "storageClassName": "netapp-block-standard",
                 "accessModes": [
                     "ReadWriteOnce"
                 ],
@@ -244,7 +241,7 @@
                     "spec": {
                         "volumes": [
                             {
-                                "name": "jenkins-jobs",
+                                "name": "jenkins-data",
                                 "persistentVolumeClaim": {
                                     "claimName": "${NAME}${SUFFIX}"
                                 }
@@ -328,9 +325,9 @@
                                 ],
                                 "volumeMounts": [
                                     {
-                                        "name": "jenkins-jobs",
+                                        "name": "jenkins-data",
                                         "readOnly": false,
-                                        "mountPath": "/var/lib/jenkins/jobs"
+                                        "mountPath": "/var/jenkins-data"
                                     },
                                     {
                                         "name": "pod-metadata",
@@ -420,12 +417,6 @@
                     },
                     "spec": {
                         "volumes": [
-                            {
-                                "name": "jenkins-home",
-                                "persistentVolumeClaim": {
-                                    "claimName": "${NAME}${SUFFIX}"
-                                }
-                            },
                             {
                                 "name": "pod-metadata",
                                 "downwardAPI":{
