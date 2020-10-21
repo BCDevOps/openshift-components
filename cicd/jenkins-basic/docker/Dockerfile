@@ -40,8 +40,9 @@ ENV BASH_ENV=/usr/local/bin/scl_enable \
 #OC command line
 RUN set -x && \
     mkdir /tmp/oc && \
-    curl -SL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.5.11.tar.gz -o /tmp/oc/openshift-origin-client-tools.tar.gz && \
-    tar -xzf /tmp/oc/openshift-origin-client-tools.tar.gz -C /tmp/oc && \
+    curl -SL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.15/openshift-client-linux-4.5.15.tar.gz -o /tmp/oc/openshift-origin-client-tools.tar.gz && \
+    gunzip /tmp/oc/openshift-origin-client-tools.tar.gz && \
+    tar -xzf /tmp/oc/openshift-origin-client-tools.tar && \
     cp /tmp/oc/oc /usr/local/bin/ && \
     chmod +x /usr/local/bin/oc && \
     rm -rf /tmp/oc
