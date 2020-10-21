@@ -43,6 +43,7 @@ RUN set -x && \
     curl -SL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.15/openshift-client-linux-4.5.15.tar.gz -o /tmp/oc/openshift-origin-client-tools.tar.gz && \
     gunzip /tmp/oc/openshift-origin-client-tools.tar.gz && \
     tar -xvf /tmp/oc/openshift-origin-client-tools.tar && \
+    ls -l /tmo/oc && \
     cp /tmp/oc/oc /usr/local/bin/ && \
     chmod +x /usr/local/bin/oc && \
     rm -rf /tmp/oc
