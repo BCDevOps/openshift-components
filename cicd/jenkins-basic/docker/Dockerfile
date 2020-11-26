@@ -1,4 +1,4 @@
-FROM registry.redhat.io/ubi8/ubi:8.2
+FROM registry.access.redhat.com/ubi8/ubi:8.2
 
 # https://blog.csanchez.org/2017/05/31/running-a-jvm-in-a-container-without-getting-killed/
 ENV JENKINS_VERSION=2.235.5 \
@@ -12,7 +12,7 @@ ENV JENKINS_VERSION=2.235.5 \
     LC_ALL=en_US.UTF-8
 
 ARG JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2"
-ARG OC_VERSION=v3.11.0
+ARG OC_VERSION=4.5.15
 ARG OC_QUALIFIER=0cbc58b-linux-64bit
 ARG TINI_VERSION=v0.18.0
 ARG TINI_QUALIFIER=amd64
@@ -40,10 +40,8 @@ ENV BASH_ENV=/usr/local/bin/scl_enable \
 #OC command line
 RUN set -x && \
     mkdir /tmp/oc && \
-    curl -SL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.15/openshift-client-linux-4.5.15.tar.gz -o /tmp/oc/openshift-origin-client-tools.tar.gz && \
-    gunzip /tmp/oc/openshift-origin-client-tools.tar.gz && \
-    tar -xf /tmp/oc/openshift-origin-client-tools.tar -C /tmp/oc && \
-    cp /tmp/oc/oc /usr/local/bin/ && \
+    curl -SL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux-${OC_VERSION}.tar.gz -o /tmp/oc/openshift-origin-client-tools.tar.gz && \
+    tar -xzf /tmp/oc/openshift-origin-client-tools.tar.gz -C /usr/local/bin/ && \
     chmod +x /usr/local/bin/oc && \
     rm -rf /tmp/oc
 
