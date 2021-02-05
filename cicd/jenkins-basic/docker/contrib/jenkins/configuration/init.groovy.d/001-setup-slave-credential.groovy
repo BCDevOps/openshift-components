@@ -25,7 +25,7 @@ def apiToken=u.getProperty(jenkins.security.ApiTokenProperty.class)
 for (def token:apiToken.getTokenList()){
     def revoked = apiToken.tokenStore.revokeToken(token.uuid)
     if(revoked != null){
-        p.tokenStats.removeId(revoked.getUuid());
+        apiToken.tokenStats.removeId(revoked.getUuid());
     }
 }
 def newToken= apiToken.tokenStore.generateNewToken('swarm')
