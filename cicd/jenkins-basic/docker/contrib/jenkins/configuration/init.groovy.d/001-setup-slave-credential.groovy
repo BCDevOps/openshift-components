@@ -31,9 +31,13 @@ for (def token:apiToken.getTokenList()){
 def newToken= apiToken.tokenStore.generateNewToken('swarm')
 ['oc','patch', "secret/${openshiftSecretName}", '-p', '{"stringData": {"password": "'+newToken.plainValue+'"}}', '-n', openshiftPodNamespace].execute().waitFor()
 println "\'${u.getId()}\' API token:${newToken.plainValue}"
-u.save()
 
-Jenkins.instance.getAuthorizationStrategy().add(hudson.slaves.SlaveComputer.CREATE, username)
-Jenkins.instance.getAuthorizationStrategy().add(hudson.slaves.SlaveComputer.CONNECT, username)
-Jenkins.instance.getAuthorizationStrategy().add(Jenkins.READ, username)
+if (Jenkins.instance.getAuthorizationStrategy().getClass().getName().equalsIgnoreCase('com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrategy')) {
+    Jenkins.instance.getAuthorizationStrategy().doAssignRole('globalRoles', 'agent', username)
+} else {
+    Jenkins.instance.getAuthorizationStrategy().add(hudson.slaves.SlaveComputer.CREATE, username)
+    Jenkins.instance.getAuthorizationStrategy().add(hudson.slaves.SlaveComputer.CONNECT, username)
+    Jenkins.instance.getAuthorizationStrategy().add(Jenkins.READ, username)
+}
+
 u.save();
