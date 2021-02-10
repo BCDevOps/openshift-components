@@ -1,0 +1,14 @@
+apiVersion: v1
+imagePullSecrets:
+  - name: jenkins-dockercfg-zww5x
+kind: ServiceAccount
+metadata:
+  annotations:
+    serviceaccounts.openshift.io/oauth-redirectreference.jenkins: >-
+      {"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"jenkins"}}
+  creationTimestamp: '2017-12-06T00:06:02Z'
+  labels:
+    app: jenkins-ephemeral
+    template: jenkins-ephemeral-template
+  name: jenkins
+  namespace: hello-sandbox
