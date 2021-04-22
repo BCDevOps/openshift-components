@@ -7,8 +7,10 @@ ENV JENKINS_VERSION=2.235.5 \
     JENKINS_HOME=/var/lib/jenkins \
     JENKINS_UC=https://updates.jenkins.io \
     OPENSHIFT_JENKINS_IMAGE_VERSION=3.11 \
-    LANG=en_US.UTF-8 \
-    LC_ALL=en_US.UTF-8
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    JENKINS_WEBROOT_DIR=/var/cache/jenkins/war--daemon \
+    JENKINS_WAR=/usr/lib/jenkins/jenkins.war
 
 ARG JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2"
 ARG OC_VERSION=4.5.15
@@ -89,6 +91,8 @@ RUN set -x && \
     chmod -R g+rx /usr/local/bin && \
     chgrp -R 0 /var/log && \
     chmod -R g+rwX /var/log && \
+    unzip -qo $JENKINS_WAR -d $JENKINS_WEBROOT_DIR && \
+    find $JENKINS_WEBROOT_DIR -name 'remoting-*.jar' -print0 | xargs --null -I {} ln -fs '{}' /var/cache/jenkins/remoting.jar && \
     chgrp -R 0 /var/cache/jenkins && \
     chmod -R g+rwX /var/cache/jenkins
 
