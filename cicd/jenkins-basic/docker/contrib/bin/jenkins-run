@@ -98,6 +98,7 @@ fi
 
 #Copy all configuration files to JENKINS_HOME
 rsync -av --no-o --no-g --no-perms --keep-dirlinks --no-acls --no-xattrs --no-super --omit-dir-times --exclude 'plugins' $JENKINS_REF_HOME/ $JENKINS_HOME/
+chmod -R g+rw $JENKINS_HOME
 
 # if file/directoryy exists, and it is not a syymbolic link, delete it
 [[ -e "$JENKINS_HOME/plugins" && ! -L "$JENKINS_HOME/plugins" ]] &&  rm -rf $JENKINS_HOME/plugins
